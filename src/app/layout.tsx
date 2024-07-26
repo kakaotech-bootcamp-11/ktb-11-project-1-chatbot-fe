@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProviders from "./components/ReactQueryProvider";
+import { Inter, Nanum_Gothic } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
+const ng = Nanum_Gothic({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
