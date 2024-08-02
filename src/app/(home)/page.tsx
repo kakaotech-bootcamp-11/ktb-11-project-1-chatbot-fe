@@ -9,7 +9,7 @@ export default function Page() {
         <MessageInput />
       </main>
       <div className="flex w-[500px] border border-white rounded-xl text-white justify-center items-center">
-        위젯
+         위젯
       </div>
     </div>
   );
