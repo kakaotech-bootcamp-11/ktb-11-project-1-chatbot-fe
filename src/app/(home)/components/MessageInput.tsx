@@ -11,7 +11,7 @@ import {useQueryClient} from "@tanstack/react-query";
 export default function MessageInput() {
     const [inputValue, setInputValue] = useState("");
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const [chatId, setCurrentChatId] = useState<string|null>(null);
+    const [chatId, setCurrentChatId] = useState<number|null>(null);
     const queryClient = useQueryClient();
     const pathname = usePathname();
     const router = useRouter();
@@ -19,7 +19,7 @@ export default function MessageInput() {
     useEffect(() => {
         const chatIdMatch = pathname.match(/\/chat\/(\d+)/);
         if (chatIdMatch) {
-            setCurrentChatId(chatIdMatch[1]);
+            setCurrentChatId(parseInt(chatIdMatch[1]));
         } else {
             setCurrentChatId(null);
         }

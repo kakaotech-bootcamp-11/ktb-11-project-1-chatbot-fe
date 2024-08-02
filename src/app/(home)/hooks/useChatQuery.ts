@@ -1,5 +1,4 @@
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {consumeIterator} from "next/dist/build/babel/loader/util";
 
 export interface ChatTitle {
     id: number;
@@ -52,8 +51,7 @@ export const useChatHistoryQuery = (chatId: number) => {
     });
 };
 
-export const sendChatMessage = async ( chatId: string, message: string ) => {
-    console.log("sendChatTest: " + message);
+export const sendChatMessage = async ( chatId: number, message: string ) => {
     const response = await fetch(`http://localhost:8080/chats/me/${chatId}/messages`, {
         method: 'POST',
         headers: {
