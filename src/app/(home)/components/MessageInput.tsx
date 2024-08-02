@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {SendHorizontal} from "lucide-react";
 import {useEffect, useState} from "react";
 import {ChatContent, createNewChat, sendChatMessage} from "@/app/(home)/hooks/useChatQuery";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {useQueryClient} from "@tanstack/react-query";
 
 export default function MessageInput() {
@@ -14,7 +14,7 @@ export default function MessageInput() {
     const [chatId, setCurrentChatId] = useState<string|null>(null);
     const queryClient = useQueryClient();
     const pathname = usePathname();
-
+    const router = useRouter();
 
     useEffect(() => {
         const chatIdMatch = pathname.match(/\/chat\/(\d+)/);
@@ -35,6 +35,11 @@ export default function MessageInput() {
                 // 채팅방 자체가 없는경우
                 const createdChat = createNewChat(inputValue);
                 // queryClient.getQueryData([])
+                const createdChat = await createNewChat(inputValue);
+                router.push(`/chat/${createdChat.chatId}`);
+                await queryClient.invalidateQueries({
+                    queryKey: ["getTitles"]
+                })
             } else {
                 // 채팅방 존재하는 경우
                 console.log("[not null] Message sent:", chatId);
