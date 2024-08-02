@@ -79,7 +79,7 @@ export interface aiResponse {
 }
 
 
-export const createNewChat = async (content: string) => {
+export const createNewChat = async (content: string) : Promise<createdChat>  => {
     const response = await fetch(`http://localhost:8080/chats/me/new`, {
         method: 'POST',
         headers: {

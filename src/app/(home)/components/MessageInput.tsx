@@ -28,25 +28,32 @@ export default function MessageInput() {
 
     const handleSubmit = async () => {
         if (inputValue.trim() !== "") {
-            console.log("Message sent:", inputValue);
-            // todo
-            // 만약 chatId가 null인경우 -> 새로운 채팅이라 간주?
             if (chatId === null) {
-                // 채팅방 자체가 없는경우
-                const createdChat = createNewChat(inputValue);
-                // queryClient.getQueryData([])
                 const createdChat = await createNewChat(inputValue);
                 router.push(`/chat/${createdChat.chatId}`);
                 await queryClient.invalidateQueries({
                     queryKey: ["getTitles"]
                 })
             } else {
-                // 채팅방 존재하는 경우
-                console.log("[not null] Message sent:", chatId);
-                const data: ChatContent[] = await sendChatMessage(chatId, inputValue);
-                queryClient.setQueryData(["chatHistory", chatId], (old:ChatContent[]) => [...old, data]);
+                queryClient.setQueryData(["chatHistory", chatId], (prev: ChatContent[]) => {
+                    const newChat = {
+                        chatMessageId: prev[prev.length - 1].chatMessageId + 1,
+                        content: inputValue,
+                        isUser: true,
+                    };
+                    return [...prev, newChat];
+                });
+
+                const data: ChatContent = await sendChatMessage(chatId, inputValue);
+                queryClient.setQueryData(["chatHistory", chatId], (prev: ChatContent[]) => {
+                    const newChat = {
+                        chatMessageId: prev[prev.length - 1].chatMessageId + 1,
+                        content: data.content,
+                        isUser: false,
+                    };
+                    return [...prev, newChat];
+                });
             }
-            // queryClient.setQueryData('chatMessages', (old) => [...old, inputValue]);
             setInputValue(""); // 입력 필드 초기화
         }
     };
