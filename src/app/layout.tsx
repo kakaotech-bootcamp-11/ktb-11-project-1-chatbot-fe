@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ReactQueryProviders from "./components/ReactQueryProvider";
 import { Inter, Nanum_Gothic } from "next/font/google";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 const ng = Nanum_Gothic({ subsets: ["latin"], weight: ["400"] });
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReactQueryProviders>{children}</ReactQueryProviders>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
