@@ -3,7 +3,7 @@ import { IoIosSubway } from "react-icons/io";
 
 export default function TraffixWidget() {
   return (
-    <div className="relative flex flex-col w-ull h-full rounded-xl p-1 items-center space-y-2 text-sm bg-gray-900">
+    <div className="relative flex flex-col w-full h-full rounded-xl p-1 items-center space-y-2 text-sm bg-gray-900">
       <div className="font-semibold text-lg">교통 정보</div>
       <div className="absolute right-2 text-xs text-gray-500">(집: 의정부)</div>
       <Separator className="bg-gray-600" />

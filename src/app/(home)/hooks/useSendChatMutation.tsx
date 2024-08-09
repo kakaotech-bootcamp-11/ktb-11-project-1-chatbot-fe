@@ -75,6 +75,8 @@ export function useSendChatMutation(
       setIsChatLoading(false);
     },
     onError: (error, variables, context) => {
+      // window.location.reload();
+      setIsChatLoading(false);
       toast.error("잘못된 요청입니다.");
     },
   });

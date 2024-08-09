@@ -32,7 +32,7 @@ export default function Chat({ chatId }: Props) {
 
   return (
     <div
-      className="flex w-full h-full p-4 overflow-auto"
+      className="flex flex-col items-center justify-center w-full h-full p-4 overflow-auto"
       ref={scrollContainerRef}
     >
       <div className="w-full h-full space-y-4">
@@ -50,15 +50,15 @@ export default function Chat({ chatId }: Props) {
               </Avatar>
             )}
             {message.content === "" ? (
-              <div className="bg-muted max-w-[75%] p-4 rounded-lg">
+              <div className="bg-muted max-w-[75%] p-4 rounded-2xl">
                 {/* <Skeleton className="h-4 w-[200px]" /> */}
                 <CursorLoading />
               </div>
             ) : (
               <div
-                className={`rounded-lg p-4 max-w-[75%] ${
+                className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[75%] ${
                   message.isUser
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground font-light"
                     : "bg-muted text-muted-foreground text-[#0E1E46]"
                 }`}
               >

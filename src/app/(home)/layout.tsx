@@ -13,7 +13,7 @@ export default function HomeLayout({
   console.log(session);
 
   return (
-    <div className="flex flex-row h-screen text-white bg-[#0E1E46] p-4 gap-2">
+    <div className="flex flex-row h-screen w-full text-white bg-[#0E1E46] p-4 gap-2">
       <Sidebar session={session} />
       {children}
     </div>

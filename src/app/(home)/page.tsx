@@ -13,8 +13,8 @@ export default function Page() {
   );
 
   return (
-    <div className="flex flex-row w-full p-2 space-x-2">
-      <main className="flex flex-col w-full p-2 text-black bg-white rounded-2xl">
+    <div className="flex flex-row w-full h-full p-2 space-x-2">
+      <main className="flex flex-col w-full gap-2 p-2 text-black bg-white rounded-2xl">
         {/* <InitialChat /> */}
         {isChatLoading ? <InitialLoadingChat /> : <InitialChat />}
         <MessageInput />

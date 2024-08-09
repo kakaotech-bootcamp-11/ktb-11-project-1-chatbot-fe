@@ -3,15 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowUp, SendHorizontal } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateNewChatMutation } from "../hooks/useCreateNewChatMutation";
-import { useSendChatMutation } from "../hooks/useSendChatMutation";
 import useSkeletonStore from "@/store/skeletonStore";
 import { Textarea } from "@/components/ui/textarea";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
+import { useSendChatMutation } from "../hooks/useSendChatMutation";
 
 type Props = {
   chatId?: number;
@@ -20,6 +20,8 @@ type Props = {
 export default function MessageInput({ chatId }: Props) {
   const [inputValue, setInputValue] = useState("");
   const [chatIndex, setChatIndex] = useState<number>();
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { mutate } = useCreateNewChatMutation();
   const { mutate: sendMutate } = useSendChatMutation(chatId, chatIndex);
@@ -76,10 +78,26 @@ export default function MessageInput({ chatId }: Props) {
     setInputValue(""); // 입력 필드 초기화
   };
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      // Reset height to auto to calculate the new scrollHeight correctly
+      textareaRef.current.style.height = "auto";
+      const height = textareaRef.current.scrollHeight;
+      if (height <= 242) {
+        textareaRef.current.style.height = height + "px";
+      } else {
+        textareaRef.current.style.height = "242px";
+      }
+    }
+  }, [inputValue]);
+
   return (
-    <div className="relative flex h-[80px] justify-center items-center p-2">
-      <Input
-        className="flex items-center justify-center h-full pl-6 rounded-full "
+    <div className="relative flex items-center justify-center flex-1 flex-grow-0 w-full min-w-0 p-2 border rounded-lg">
+      <textarea
+        ref={textareaRef}
+        rows={1}
+        dir="auto"
+        className="m-0 p-1 text-[#0D0D0D] resize-none w-full h-full bg-transparent outline-none max-h-52 overflow-y-auto"
         placeholder="물어보고 싶은 질문을 입력해주세요!"
         value={inputValue}
         onChange={(e) => {
@@ -87,25 +105,18 @@ export default function MessageInput({ chatId }: Props) {
         }}
         onKeyDown={(e: any) => {
           if (e.isComposing || e.keyCode === 229) return;
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
             handleSubmit();
           }
         }}
       />
       <ArrowUp
         onClick={handleSubmit}
-        className={`text-white absolute right-8 rounded-full w-8 h-8 p-1 ${
+        className={`text-white absolute right-2 rounded-full w-8 h-8 p-1 ${
           inputValue ? "bg-[#0E1E46]" : "bg-gray-500"
         }  hover:bg-gray-500 items-center justify-center`}
       />
-      {/* <Button
-        onClick={handleSubmit}
-        className="absolute right-8 rounded-full w-8 h-8 bg-[#0E1E46] hover:bg-gray-600 items-center justify-center"
-        variant="outline"
-        disabled={!inputValue}
-      >
-        <SendHorizontal className="text-white " />
-      </Button> */}
     </div>
   );
 }

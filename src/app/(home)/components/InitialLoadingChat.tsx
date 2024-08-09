@@ -34,7 +34,7 @@ export default function InitialLoadingChat() {
               </div>
             ) : (
               <div
-                className={`rounded-lg p-4 max-w-[75%] ${
+                className={`rounded-lg whitespace-pre-wrap p-4 max-w-[75%] ${
                   message.isUser
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground text-[#0E1E46]"

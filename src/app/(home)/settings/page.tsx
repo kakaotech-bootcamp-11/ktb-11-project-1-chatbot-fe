@@ -9,19 +9,19 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const router = useRouter();
   return (
-    <div className="relative flex flex-row h-full items-center justify-center w-full text-black border">
+    <div className="relative flex flex-row items-center justify-center w-full h-full text-black">
       {/* 프로필 */}
-      <div className="flex flex-col w-1/2 h-full justify-center items-center">
+      <div className="flex flex-col items-center justify-center w-1/2 h-full">
         <UserProfile />
       </div>
-      <Separator orientation="vertical" />
+      <Separator orientation="vertical" className="bg-gray-500" />
       {/* 유저 추천 문구 설정 */}
-      <div className="flex flex-col w-1/2 h-full items-center">
+      <div className="flex flex-col items-center w-1/2 h-full">
         <UserRecommendattion />
       </div>
       <X
         onClick={() => router.back()}
-        className="text-white absolute top-10 right-10 hover:bg-white hover:bg-opacity-20 rounded-full "
+        className="absolute text-white rounded-full top-10 right-10 hover:bg-white hover:bg-opacity-20 "
       />
     </div>
   );
