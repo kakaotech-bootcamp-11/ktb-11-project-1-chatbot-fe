@@ -21,29 +21,24 @@ export function useCreateNewChatMutation() {
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
     (state) => state
   );
-  const { setInitialData, resetInitialData } = useInitialDataStore(
-    (state) => state
-  );
+  const { setInitialData, resetInitialData, addInitialData } =
+    useInitialDataStore((state) => state);
 
   return useMutation({
     mutationKey: ["createNewChat"],
     mutationFn: async (content: string): Promise<CreatedChat> => {
       setIsChatLoading(true);
-      setInitialData({
+      addInitialData({
         chatMessageId: 0,
-        content: content,
+        content,
         isUser: true,
       });
-      setInitialData({
-        chatMessageId: 0,
+      addInitialData({
+        chatMessageId: 1,
         content: "",
         isUser: false,
       });
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve("데이터 준비 완료");
-        }, 3000);
-      });
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/chats/me/new`,
         {
@@ -57,6 +52,11 @@ export function useCreateNewChatMutation() {
           }),
         }
       );
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve("데이터 준비 완료");
+        }, 3000);
+      });
       if (!response.ok) {
         const errorData = await response.json();
         throw {
@@ -68,6 +68,11 @@ export function useCreateNewChatMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
+      setInitialData(1, {
+        chatMessageId: 1,
+        isUser: false,
+        content: data.aiResponse.content,
+      });
       await queryClient.invalidateQueries({
         queryKey: ["titles"],
       });

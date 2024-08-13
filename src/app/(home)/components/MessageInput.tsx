@@ -92,12 +92,12 @@ export default function MessageInput({ chatId }: Props) {
   }, [inputValue]);
 
   return (
-    <div className="relative flex items-center justify-center flex-1 flex-grow-0 w-full min-w-0 p-2 border rounded-lg">
+    <div className="flex flex-row bg-[#f4f4f4] items-center justify-center flex-1 w-full gap-2 min-w-0 p-2 border rounded-3xl">
       <textarea
         ref={textareaRef}
         rows={1}
         dir="auto"
-        className="m-0 p-1 text-[#0D0D0D] resize-none w-full h-full bg-transparent outline-none max-h-52 overflow-y-auto"
+        className="m-0 p-1 pl-4 placeholder:text-[#9B9B9B] resize-none w-full h-full bg-transparent outline-none max-h-52 overflow-y-auto"
         placeholder="물어보고 싶은 질문을 입력해주세요!"
         value={inputValue}
         onChange={(e) => {
@@ -111,12 +111,14 @@ export default function MessageInput({ chatId }: Props) {
           }
         }}
       />
-      <ArrowUp
-        onClick={handleSubmit}
-        className={`text-white absolute right-2 rounded-full w-8 h-8 p-1 ${
-          inputValue ? "bg-[#0E1E46]" : "bg-gray-500"
-        }  hover:bg-gray-500 items-center justify-center`}
-      />
+      <div className="flex items-end h-full justify-center">
+        <ArrowUp
+          onClick={handleSubmit}
+          className={`text-white rounded-full w-8 h-8 p-1 ${
+            inputValue ? "bg-[#0E1E46]" : "bg-gray-200"
+          }  hover:bg-gray-500 items-center justify-center`}
+        />
+      </div>
     </div>
   );
 }

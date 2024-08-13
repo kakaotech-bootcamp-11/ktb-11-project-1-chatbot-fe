@@ -75,10 +75,10 @@ export default function UserRecommendation() {
                     type="button"
                     onClick={() => remove(index)}
                     disabled={fields.length <= 1}
-                    className="p-2 bg-red-500"
+                    className="p-2 bg-red-500 rounded-full"
                     variant="ghost"
                   >
-                    <Minus size={20} />
+                    <Minus size={20} className="" />
                   </Button>
                 </div>
                 <FormMessage />

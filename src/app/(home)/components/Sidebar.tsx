@@ -59,7 +59,29 @@ export default function Sidebar({ session }: Props) {
   };
 
   if (isFetching) {
-    return <Skeleton className="w-[320px]" />;
+    return (
+      <aside className="flex flex-col h-full py-4 space-y-2 w-[318px] max-w-[318px]">
+        <header className="flex flex-row items-center space-x-3">
+          <Skeleton className="w-14 h-14 rounded-xl" />
+          <div className="flex flex-col space-y-2">
+            <Skeleton className="w-3/4 h-5" />
+            <Skeleton className="w-1/2 h-4" />
+          </div>
+        </header>
+        <Separator />
+        <Skeleton className="w-full h-15 mb-2" />
+        <div className="relative h-full px-2 overflow-y-auto space-y-2">
+          {[...Array(5)].map((_, index) => (
+            <Skeleton key={index} className="w-full h-9 rounded-lg" />
+          ))}
+        </div>
+        <Separator />
+        <div className="flex flex-col items-center justify-center p-2 space-y-2">
+          <Skeleton className="w-full h-8" />
+          <Skeleton className="w-full h-8" />
+        </div>
+      </aside>
+    );
   }
 
   return (
@@ -72,7 +94,7 @@ export default function Sidebar({ session }: Props) {
               width={40}
               src={ktbBalloonLogo}
               className="rounded-xl"
-              style={{ width: "auto", height: "100%" }}
+              style={{ width: "auto", height: "auto" }}
               alt="KTB 로고"
             />
             <div>
@@ -87,7 +109,7 @@ export default function Sidebar({ session }: Props) {
           >
             새 채팅
           </button>
-          <div className="relative h-full px-2 overflow-y-auto">
+          <div className="relative h-full px-2 overflow-y-auto custom-scrollbar">
             {chatTitles.map((chat) => (
               <div
                 key={chat.id}

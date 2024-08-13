@@ -36,10 +36,20 @@ export default function InitialChat() {
     return <Loading />;
   }
 
+  const messageBoxStyle =
+    "flex items-center justify-center w-[160px] shadow-lg text-gray-500 text-balance h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted";
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full space-y-2">
       {/* <Image width={200} height={200} src={lionImage} alt="lion" priority /> */}
-      <Image width={200} height={200} src={ryan} alt="ryan" priority />
+      <Image
+        className="drop-shadow-2xl"
+        width={200}
+        height={200}
+        src={ryan}
+        alt="ryan"
+        priority
+      />
       <div className="text-lg">
         카카오테크 부트캠프 챗봇에 오신 것을 환영합니다!
       </div>
@@ -48,7 +58,7 @@ export default function InitialChat() {
           onClick={() => {
             handleMessageSubmmit(basicMessages[0]);
           }}
-          className="flex items-center justify-center h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted"
+          className={messageBoxStyle}
         >
           {basicMessages[0]}
         </div>
@@ -56,7 +66,7 @@ export default function InitialChat() {
           onClick={() => {
             handleMessageSubmmit(basicMessages[1]);
           }}
-          className="flex items-center justify-center h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted"
+          className={messageBoxStyle}
         >
           {basicMessages[1]}
         </div>
@@ -64,7 +74,7 @@ export default function InitialChat() {
           onClick={() => {
             handleMessageSubmmit(basicMessages[2]);
           }}
-          className="flex items-center justify-center h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted"
+          className={messageBoxStyle}
         >
           {basicMessages[2]}
         </div>

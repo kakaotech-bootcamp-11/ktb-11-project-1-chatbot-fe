@@ -58,7 +58,7 @@ export default function Chat({ chatId }: Props) {
               <div
                 className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[75%] ${
                   message.isUser
-                    ? "bg-primary text-primary-foreground font-light"
+                    ? "bg-primary text-primary-foreground font-normal"
                     : "bg-muted text-muted-foreground text-[#0E1E46]"
                 }`}
               >
