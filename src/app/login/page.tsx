@@ -8,7 +8,7 @@ import kakaoSymbol from "../../../public/images/kakao_symbol.png";
 
 export default function Page() {
   const handleKakaoLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`;
   };
 
   return (
@@ -20,14 +20,20 @@ export default function Page() {
           src={ktbLogo}
           alt="Kakao Icon"
           priority
-          className=""
+          style={{ height: "auto", width: "auto" }}
         />
         <Tooltip message="⚡️10초만에 빠른가입!⚡️">
           <Button
             className="w-[400px] h-10 bg-[#FEE500] hover:bg-[#EDD600] text-black font-normal space-x-4"
             onClick={handleKakaoLogin}
           >
-            <Image width={20} height={20} src={kakaoSymbol} alt="카카오 심볼" />
+            <Image
+              width={20}
+              height={20}
+              src={kakaoSymbol}
+              alt="카카오 심볼"
+              style={{ height: 20, width: "auto" }}
+            />
             <div>카카오로 시작하기</div>
           </Button>
         </Tooltip>

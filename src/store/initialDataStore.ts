@@ -1,0 +1,29 @@
+import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
+import { create } from "zustand";
+
+interface InitialDataState {
+  initialData: ChatContent[];
+  setInitialData: (index: number, value: ChatContent) => void;
+  addInitialData: (value: ChatContent) => void;
+  resetInitialData: () => void;
+}
+
+const useInitialDataStore = create<InitialDataState>((set) => ({
+  initialData: [],
+  setInitialData: (index, value) =>
+    set((state) => {
+      const newData = [...state.initialData];
+      newData[index] = value;
+      return { initialData: newData };
+    }),
+  addInitialData: (value) =>
+    set((state) => ({
+      initialData: [...state.initialData, value],
+    })),
+  resetInitialData: () =>
+    set((state) => ({
+      initialData: [],
+    })),
+}));
+
+export default useInitialDataStore;

@@ -1,0 +1,23 @@
+/* Loading.css */
+.blinking-cursor {
+  display: inline-block;
+  width: 8px; /* 커서의 너비 */
+  height: 20px; /* 커서의 높이 */
+  background-color: black; /* 커서의 색상 */
+  margin-left: 2px; /* 커서와 텍스트 간격 */
+  -webkit-animation: blink 1s step-end infinite;
+  -moz-animation: blink 1s step-end infinite;
+  -ms-animation: blink 1s step-end infinite;
+  -o-animation: blink 1s step-end infinite;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from,
+  to {
+    background-color: transparent;
+  }
+  50% {
+    background-color: gray;
+  }
+}
