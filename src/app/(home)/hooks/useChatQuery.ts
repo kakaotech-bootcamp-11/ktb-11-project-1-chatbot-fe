@@ -1,3 +1,4 @@
+import useInitialDataStore from "@/store/initialDataStore";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -71,10 +72,12 @@ const getChatHistory = async (chatId: number) => {
 export const useChatHistoryQuery = (chatId: number) => {
   const router = useRouter();
 
+  const { initialData } = useInitialDataStore((state) => state);
+
   const chatHistory = useQuery<ChatContent[]>({
     queryKey: ["chatHistory", chatId],
     queryFn: () => getChatHistory(chatId),
-    enabled: !!chatId,
+    enabled: !!chatId, // initialData가 없을 때만 쿼리 실행
     retry: 0,
   });
 

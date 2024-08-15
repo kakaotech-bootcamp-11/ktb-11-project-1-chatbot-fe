@@ -9,6 +9,7 @@ import useSkeletonStore from "@/store/skeletonStore";
 import Loading from "@/app/components/loading";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
+import { useCreateNewChatStreamMutation } from "../hooks/useCreateNewChatStreamMutation";
 
 export default function InitialChat() {
   const [basicMessages, setBasicMessages] = useState([
@@ -16,25 +17,17 @@ export default function InitialChat() {
     "집 어떻게 가야할지 추천해줘",
     "가장 빠른 코딩테스트 날짜가 언제야?",
   ]);
-  const { mutate } = useCreateNewChatMutation();
-  const { isChatLoading, setIsChatLoading } = useSkeletonStore(
-    (state) => state
-  );
+  // const { mutate } = useCreateNewChatMutation();
+  const { mutate } = useCreateNewChatStreamMutation();
   const { sessionError } = useSessionErrorStore((state) => state);
 
   const handleMessageSubmmit = (message: string) => {
     if (!sessionError) {
-      // setIsChatLoading(true);
       mutate(message);
-      // setIsChatLoading(false);
     } else {
       toast.error("로그인이 필요한 서비스입니다.");
     }
   };
-
-  if (isChatLoading) {
-    return <Loading />;
-  }
 
   const messageBoxStyle =
     "flex items-center justify-center w-[160px] shadow-lg text-gray-500 text-balance h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted";

@@ -1,12 +1,10 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
-import { Skeleton } from "@/components/ui/skeleton";
 import useInitialDataStore from "@/store/initialDataStore";
-import Loading from "@/app/components/loading";
 import CursorLoading from "../chat/[chatId]/components/CursorLoading";
+import ReactMarkdown from "react-markdown";
+import { CodeBlock } from "../chat/[chatId]/components/CodeBlock";
 
 export default function InitialLoadingChat() {
   const { initialData } = useInitialDataStore((state) => state);
@@ -27,22 +25,41 @@ export default function InitialLoadingChat() {
                 <AvatarImage src="/images/ktb_balloon_logo.jpeg" />
               </Avatar>
             )}
-            {message.content === "" ? (
-              <div className="bg-muted max-w-[75%] p-4 rounded-lg">
-                {/* <Skeleton className="h-4 w-[200px]" /> */}
-                <CursorLoading />
-              </div>
-            ) : (
-              <div
-                className={`rounded-lg whitespace-pre-wrap p-4 max-w-[75%] ${
-                  message.isUser
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground text-[#0E1E46]"
-                }`}
-              >
-                {message.content}
-              </div>
-            )}
+            <div
+              className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[75%] ${
+                message.isUser
+                  ? "bg-primary text-primary-foreground font-normal"
+                  : "bg-muted text-muted-foreground text-[#0E1E46]"
+              }`}
+            >
+              {message.isUser ? (
+                message.content
+              ) : (
+                <span className="">
+                  <ReactMarkdown
+                    className="prose"
+                    components={{
+                      code({ node, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        return match ? (
+                          <CodeBlock
+                            language={match[1]}
+                            value={String(children).replace(/\n$/, "")}
+                            {...props}
+                          />
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>

@@ -2,11 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 
 interface WeeklyWeatherResponse {
   day: string;
+  date: string;
   icon: string;
   avg_temp: number;
   max_temp: number;
   min_temp: number;
-  rain: number;
+  humidity: number;
+  description: string;
 }
 
 const getWeaklyWeather = async () => {

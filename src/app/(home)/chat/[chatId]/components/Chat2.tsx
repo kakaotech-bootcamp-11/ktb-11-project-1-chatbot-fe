@@ -2,20 +2,31 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
-
 import { CodeBlock } from "./CodeBlock";
 import { useChatHistoryQuery } from "@/app/(home)/hooks/useChatQuery";
 import Loading from "@/app/components/loading";
 import { useEffect, useRef } from "react";
-import CursorLoading from "./CursorLoading";
+import useInitialDataStore from "@/store/initialDataStore";
+import { Prism } from "react-syntax-highlighter";
+import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 type Props = {
   chatId: number;
 };
 
 export default function Chat({ chatId }: Props) {
+  const { initialData, addInitialData } = useInitialDataStore((state) => state);
+
   const { data, error, isLoading } = useChatHistoryQuery(chatId);
+
   const scrollContainerRef = useRef<any>(null);
+
+  // useEffect(() => {
+  //   if (data && !initialData.length) {
+  //     // fetch된 데이터가 있고 initialData가 비어있는 경우에만 상태에 추가
+  //     data.forEach((item) => addInitialData(item));
+  //   }
+  // }, [data, initialData.length, addInitialData]);
 
   useEffect(() => {
     // 데이터가 로드될 때마다 스크롤을 가장 아래로 설정
@@ -23,10 +34,14 @@ export default function Chat({ chatId }: Props) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [data]);
+  }, [initialData]);
 
   if (!data) return <Loading />;
   if (error) return <div>Error</div>;
+
+  // const messagesToShow = initialData.length ? initialData : data || [];
+
+  // console.log(data);
 
   return (
     <div
@@ -65,12 +80,25 @@ export default function Chat({ chatId }: Props) {
                       code({ node, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
                         return match ? (
-                          <CodeBlock
+                          <Prism
                             language={match[1]}
-                            value={String(children).replace(/\n$/, "")}
-                            {...props}
-                          />
+                            style={materialDark}
+                            // wrapLines={true} // 라인 래핑
+                            lineProps={{
+                              style: {
+                                wordBreak: "break-all",
+                                whiteSpace: "pre-wrap",
+                              },
+                            }} // 긴 줄의 코드 처리
+                          >
+                            {String(children).replace(/\n$/, "")}
+                          </Prism>
                         ) : (
+                          // <CodeBlock
+                          //   language={match[1]}
+                          //   value={String(children).replace(/\n$/, "")}
+                          //   {...props}
+                          // />
                           <code className={className} {...props}>
                             {children}
                           </code>

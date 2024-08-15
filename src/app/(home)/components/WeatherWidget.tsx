@@ -36,8 +36,8 @@ export default function WeatherWidget() {
                 {todayWeather.now.description}
               </div>
               <div>
-                최고: {Math.round(todayWeather.now.temp_max)}°C 최저:{" "}
-                {Math.round(todayWeather.now.temp_min)}°C
+                최고: {Math.round(todayWeather.now.tempMin) ?? 0}°C 최저:{" "}
+                {Math.round(todayWeather.now.tempMax) ?? 0}°C
               </div>
             </div>
           </div>
@@ -87,7 +87,12 @@ export default function WeatherWidget() {
                 <div className="flex flex-row justify-around w-1/2">
                   <div className="flex flex-col items-center">
                     <div>{item.day[0]}</div>
-                    <div className="text-xs text-gray-400">{"8/12"}</div>
+                    <div className="text-xs text-gray-400">
+                      {new Date(item.date).toLocaleDateString("en-US", {
+                        month: "numeric",
+                        day: "numeric",
+                      })}
+                    </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <Image
@@ -101,13 +106,20 @@ export default function WeatherWidget() {
                 </div>
                 <div className="flex flex-col items-center">
                   <div>
-                    {Math.round(item.min_temp)}°C / {Math.round(item.max_temp)}
-                    °C
+                    <span className="text-blue-400">
+                      {Math.round(item.min_temp)}°C
+                    </span>{" "}
+                    /{" "}
+                    <span className="text-red-400">
+                      {Math.round(item.max_temp)}°C
+                    </span>
                   </div>
-                  <div className="text-xs text-gray-400">{"실비"}</div>
+                  <div className="text-xs text-gray-400">
+                    {item.description}
+                  </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-blue-400">{item.rain * 100}%</span>
+                  <span className="text-blue-400">{item.humidity}%</span>
                 </div>
               </div>
             ))}

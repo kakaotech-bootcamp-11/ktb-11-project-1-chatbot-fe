@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
 import { useSendChatMutation } from "../hooks/useSendChatMutation";
+import { useSendChatStreamMutation } from "../hooks/useSendChatStreamMutation";
 
 type Props = {
   chatId?: number;
@@ -25,6 +26,8 @@ export default function MessageInput({ chatId }: Props) {
 
   const { mutate } = useCreateNewChatMutation();
   const { mutate: sendMutate } = useSendChatMutation(chatId, chatIndex);
+  // const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
+
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
     (state) => state
   );
