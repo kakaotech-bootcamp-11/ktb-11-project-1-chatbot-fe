@@ -18,7 +18,7 @@ export default function InitialChat() {
     "가장 빠른 코딩테스트 날짜가 언제야?",
   ]);
   // const { mutate } = useCreateNewChatMutation();
-  const { mutate } = useCreateNewChatStreamMutation();
+  const { mutate } = useCreateNewChatMutation();
   const { sessionError } = useSessionErrorStore((state) => state);
 
   const handleMessageSubmmit = (message: string) => {
@@ -36,9 +36,10 @@ export default function InitialChat() {
     <div className="flex flex-col items-center justify-center w-full h-full space-y-2">
       {/* <Image width={200} height={200} src={lionImage} alt="lion" priority /> */}
       <Image
-        className="drop-shadow-2xl"
-        width={200}
-        height={200}
+        className="drop-shadow-3xl"
+        style={{ width: "auto", height: "auto" }}
+        width={150}
+        height={150}
         src={ryan}
         alt="ryan"
         priority

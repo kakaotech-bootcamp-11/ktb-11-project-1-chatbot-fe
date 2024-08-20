@@ -8,6 +8,8 @@ import { useChatHistoryQuery } from "@/app/(home)/hooks/useChatQuery";
 import Loading from "@/app/components/loading";
 import { useEffect, useRef } from "react";
 import CursorLoading from "./CursorLoading";
+import useSkeletonStore from "@/store/skeletonStore";
+import useInitialDataStore from "@/store/initialDataStore";
 
 type Props = {
   chatId: number;
@@ -16,6 +18,9 @@ type Props = {
 export default function Chat({ chatId }: Props) {
   const { data, error, isLoading } = useChatHistoryQuery(chatId);
   const scrollContainerRef = useRef<any>(null);
+  const { isChatLoading } = useSkeletonStore((state) => state);
+
+  const { initialData } = useInitialDataStore((state) => state);
 
   useEffect(() => {
     // 데이터가 로드될 때마다 스크롤을 가장 아래로 설정
@@ -23,9 +28,12 @@ export default function Chat({ chatId }: Props) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [data]);
+  }, [data, initialData]);
 
-  if (!data) return <Loading />;
+  // chatId가 0일 때, zustand의 initialData를 사용하도록 설정
+
+  const chatData = chatId === 0 ? initialData : data;
+  if (isLoading && chatId !== 0) return <Loading />;
   if (error) return <div>Error</div>;
 
   return (
@@ -34,7 +42,7 @@ export default function Chat({ chatId }: Props) {
       ref={scrollContainerRef}
     >
       <div className="w-full h-full space-y-4">
-        {data.map((message, index) => (
+        {chatData?.map((message, index) => (
           <div
             key={index}
             className={`flex items-start gap-4 ${
@@ -80,6 +88,9 @@ export default function Chat({ chatId }: Props) {
                   >
                     {message.content}
                   </ReactMarkdown>
+                  {isChatLoading && index === chatData.length - 1 && (
+                    <CursorLoading />
+                  )}
                 </span>
               )}
             </div>

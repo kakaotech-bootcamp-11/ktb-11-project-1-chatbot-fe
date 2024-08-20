@@ -68,6 +68,7 @@ export function useCreateNewChatMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
+      console.log(data);
       setInitialData(1, {
         chatMessageId: 1,
         isUser: false,
@@ -86,6 +87,8 @@ export function useCreateNewChatMutation() {
       setIsChatLoading(false);
     },
     onError: (error, variables, context) => {
+      resetInitialData();
+      setIsChatLoading(false);
       toast.error("잘못된 요청입니다.");
     },
   });

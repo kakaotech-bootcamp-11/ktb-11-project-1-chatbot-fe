@@ -4,7 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { CodeBlock } from "./CodeBlock";
-import { useChatHistoryQuery } from "@/app/(home)/hooks/useChatQuery";
+import {
+  ChatContent,
+  useChatHistoryQuery,
+} from "@/app/(home)/hooks/useChatQuery";
 import Loading from "@/app/components/loading";
 import { memo, useEffect, useRef } from "react";
 import useInitialDataStore from "@/store/initialDataStore";
@@ -14,16 +17,11 @@ import {
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
-// import { CodeProps, ReactMarkdownProps } from 'react-markdown/lib/ast-to-react';
-
 type Props = {
-  chatId: number;
+  messages: ChatContent[];
 };
 
-export default function Chat({ chatId }: Props) {
-  const { data, error, isLoading } = useChatHistoryQuery(chatId);
-  const { initialData } = useInitialDataStore((state) => state);
-
+export default function Chat({ messages }: Props) {
   const scrollContainerRef = useRef<any>(null);
 
   useEffect(() => {
@@ -31,10 +29,7 @@ export default function Chat({ chatId }: Props) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [data]);
-
-  if (!data) return <Loading />;
-  if (error) return <div>Error</div>;
+  }, [messages]);
 
   return (
     <div
@@ -42,7 +37,7 @@ export default function Chat({ chatId }: Props) {
       ref={scrollContainerRef}
     >
       <div className="w-full h-full space-y-4">
-        {data.map((message, index) => (
+        {messages.map((message, index) => (
           <div
             key={index}
             className={`flex items-start gap-4 ${
@@ -60,7 +55,7 @@ export default function Chat({ chatId }: Props) {
               className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[80%] ${
                 message.isUser
                   ? "bg-primary text-primary-foreground font-normal"
-                  : "bg-muted text-muted-foreground text-ktb_navy"
+                  : "bg-muted text-muted-foreground text-[#0E1E46]"
               }`}
             >
               {message.isUser ? (

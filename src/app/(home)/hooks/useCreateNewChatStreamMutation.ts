@@ -26,18 +26,18 @@ export function useCreateNewChatStreamMutation() {
     useInitialDataStore((state) => state);
 
   return useMutation({
-    mutationKey: ["createNewChat"],
+    mutationKey: ["createNewStreamChat"],
     mutationFn: async (content: string): Promise<CreatedChat> => {
       setIsChatLoading(true);
 
-      // Add initial user message
+      // 유저 메세지
       addInitialData({
         chatMessageId: 0,
         content,
         isUser: true,
       });
 
-      // Placeholder for the AI response while streaming
+      // AI 메세지
       addInitialData({
         chatMessageId: 1,
         content: "",
@@ -100,8 +100,6 @@ export function useCreateNewChatStreamMutation() {
         }
       }
 
-      console.log("끝");
-
       // Simulate creating a new chat and return the chatId
       // In a real scenario, this would be an API call to create the chat and get the chatId
       const createdChat: CreatedChat = {
@@ -112,24 +110,16 @@ export function useCreateNewChatStreamMutation() {
       return createdChat;
     },
     onSuccess: async (data, variables, context) => {
-      console.log(data);
+      // console.log(data);
       // Invalidate and refetch any related queries
       await queryClient.invalidateQueries({
         queryKey: ["titles"],
       });
 
-      // setIsChatLoading(false);
+      // router.replace(`/chat/${data.chatId}`);
 
-      // Redirect to the new chat page
-      // router.push(`/chat/${data.chatId}`);
+      // resetInitialData();
 
-      // Simulate a delay for final processing or UI update
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Reset the initial data store
-      resetInitialData();
-
-      // Set loading state to false
       // setIsChatLoading(false);
     },
     onError: (error, variables, context) => {

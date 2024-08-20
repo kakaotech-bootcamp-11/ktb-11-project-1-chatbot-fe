@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ChatContent } from "./useChatQuery";
 import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
+import { CommentStarter } from "./useStarterQuery";
 
 export interface CreatedChat {
   chatId: number;
@@ -14,17 +14,26 @@ export interface AIResponse {
   isUser: boolean;
 }
 
-export function useDeleteChatMutation() {
+type Props = {
+  message: string;
+  // chatIndex: number;
+};
+
+export function useCommentStarterMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["deleteChat"],
-    mutationFn: async (chatId: number): Promise<AIResponse> => {
+    mutationKey: ["commentStarterMutation"],
+    mutationFn: async (commentStarters: CommentStarter[]): Promise<any> => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/chats/me/${chatId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/comment_starter`,
         {
-          method: "DELETE",
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
           credentials: "include",
+          body: JSON.stringify(commentStarters),
         }
       );
       if (!response.ok) {
@@ -38,8 +47,8 @@ export function useDeleteChatMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
-      toast.success("삭제에 성공했습니다.");
-      queryClient.invalidateQueries({ queryKey: ["titles"] });
+      toast.success("업데이트에 성공했습니다.");
+      queryClient.invalidateQueries({ queryKey: ["commentStarter"] });
     },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");

@@ -8,12 +8,19 @@ type Props = {
 };
 
 export default function MessageInput({ chatId }: Props) {
-  const { handleSubmit, textareaRef, inputValue, setInputValue } =
-    useMessageInput2(chatId as number);
+  const {
+    isChatLoading,
+    handleSubmit,
+    textareaRef,
+    inputValue,
+    setInputValue,
+  } = useMessageInput2(chatId as number);
+  // console.log(isChatLoading);
 
   return (
     <div className="flex flex-row bg-[#f4f4f4] items-center justify-center flex-1 w-full gap-2 min-w-0 p-2 border rounded-3xl">
       <textarea
+        disabled={isChatLoading}
         ref={textareaRef}
         rows={1}
         dir="auto"
@@ -35,8 +42,10 @@ export default function MessageInput({ chatId }: Props) {
         <ArrowUp
           onClick={handleSubmit}
           className={`text-white rounded-full w-8 h-8 p-1 ${
-            inputValue ? "bg-[#0E1E46]" : "bg-gray-200"
-          } hover:bg-gray-500 items-center justify-center cursor-pointer`}
+            inputValue
+              ? "bg-[#0E1E46] cursor-pointer hover:bg-blue-900 "
+              : "bg-gray-200"
+          } items-center justify-center `}
         />
       </div>
     </div>

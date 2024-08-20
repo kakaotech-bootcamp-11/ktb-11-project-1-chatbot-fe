@@ -58,7 +58,7 @@ export function useSendChatStreamMutation(
           const jsonChunks = chunk
             .split("\n\n")
             .filter((c) => c.startsWith("data: "));
-          console.log(jsonChunks);
+          // console.log(jsonChunks);
 
           for (const jsonChunk of jsonChunks) {
             const jsonStr = jsonChunk.replace("data: ", "");
@@ -72,7 +72,7 @@ export function useSendChatStreamMutation(
               const content = json.choices?.[0]?.delta?.content;
               if (content) {
                 aiResponse.content += content;
-
+                console.log(chatIndex);
                 // Update the query data as the response streams in
                 queryClient.setQueryData(
                   ["chatHistory", chatId],

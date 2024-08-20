@@ -2,10 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  ChatContent,
-  useChatTileListQuery,
-} from "@/app/(home)/hooks/useChatQuery";
+import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
 import { useCreateNewChatMutation } from "./useCreateNewChatMutation";
 import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
 import useSkeletonStore from "@/store/skeletonStore";
@@ -13,6 +10,7 @@ import useSessionErrorStore from "@/store/sessionErrorStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
+import { useSendChatMutation } from "./useSendChatMutation";
 
 export const useMessageInput2 = (chatId: number) => {
   const [inputValue, setInputValue] = useState("");
@@ -20,9 +18,10 @@ export const useMessageInput2 = (chatId: number) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // const { mutate } = useCreateNewChatMutation();
-  const { mutate } = useCreateNewChatStreamMutation();
-  const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
+  const { mutate } = useCreateNewChatMutation();
+  const { mutate: sendMutate } = useSendChatMutation(chatId, chatIndex);
+  // const { mutate } = useCreateNewChatStreamMutation();
+  // const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
 
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
     (state) => state
@@ -48,7 +47,7 @@ export const useMessageInput2 = (chatId: number) => {
         queryClient.setQueryData(
           ["chatHistory", chatId],
           (prev: ChatContent[]) => {
-            setChatIndex(prev.length);
+            // setChatIndex(prev.length + 1);
             const newChat = {
               chatMessageId: prev[prev.length - 1].chatMessageId + 1,
               content: inputValue,
@@ -57,10 +56,21 @@ export const useMessageInput2 = (chatId: number) => {
             return [...prev, newChat];
           }
         );
-        // setIsChatLoading(true);
+        queryClient.setQueryData(
+          ["chatHistory", chatId],
+          (prev: ChatContent[]) => {
+            setChatIndex(prev.length);
+            const newChat = {
+              chatMessageId: prev[prev.length - 1].chatMessageId + 1,
+              content: "",
+              isUser: false,
+            };
+            return [...prev, newChat];
+          }
+        );
+        setIsChatLoading(true);
 
-        // Send the message to the server and handle the streaming response
-        // sendMutate({ message: inputValue });
+        sendMutate({ message: inputValue });
       } catch {
         toast.error("잘못된 요청입니다.");
       }
@@ -83,6 +93,7 @@ export const useMessageInput2 = (chatId: number) => {
   }, [inputValue]);
 
   return {
+    isChatLoading,
     handleSubmit,
     textareaRef,
     inputValue,

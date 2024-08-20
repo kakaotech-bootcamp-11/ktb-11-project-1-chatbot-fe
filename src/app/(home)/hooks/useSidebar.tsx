@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useChatTileListQuery } from "@/app/(home)/hooks/useChatQuery";
+import { useChatTitleListQuery } from "@/app/(home)/hooks/useChatQuery";
 
 export const useSidebar = () => {
   const [currentChatId, setCurrentChatId] = useState<number | null>(null);
@@ -12,7 +12,7 @@ export const useSidebar = () => {
     error,
     isLoading,
     isFetching,
-  } = useChatTileListQuery();
+  } = useChatTitleListQuery();
 
   const pathname = usePathname();
   const router = useRouter();

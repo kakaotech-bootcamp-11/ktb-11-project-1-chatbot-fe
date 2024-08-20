@@ -1,6 +1,6 @@
 import useInitialDataStore from "@/store/initialDataStore";
 import useSessionErrorStore from "@/store/sessionErrorStore";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ const fetchChatTitles = async (): Promise<ChatTitle[]> => {
   const data: ChatTitle[] = await response.json();
   return data || [];
 };
-export const useChatTileListQuery = () => {
+export const useChatTitleListQuery = () => {
   const { setSessionError } = useSessionErrorStore((state) => state);
 
   const titles = useQuery<ChatTitle[]>({
@@ -38,7 +38,10 @@ export const useChatTileListQuery = () => {
     queryFn: () => fetchChatTitles(),
     retry: 1,
     select: (data) => data ?? [],
+    placeholderData: keepPreviousData,
   });
+
+  // console.log(titles.error);
 
   useEffect(() => {
     if (titles.error) {
@@ -77,7 +80,7 @@ export const useChatHistoryQuery = (chatId: number) => {
   const chatHistory = useQuery<ChatContent[]>({
     queryKey: ["chatHistory", chatId],
     queryFn: () => getChatHistory(chatId),
-    enabled: !!chatId, // initialData가 없을 때만 쿼리 실행
+    enabled: !!chatId && chatId !== 0, // initialData가 없을 때만 쿼리 실행
     retry: 0,
   });
 
