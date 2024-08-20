@@ -58,6 +58,7 @@ export default function UserRecommendation({ recommendations }: Props) {
       if (updatedRecommendations.length > 0) {
         console.log("Modified recommendations:", updatedRecommendations);
         mutate(updatedRecommendations as CommentStarter[]);
+        form.reset();
       } else {
         toast.error("수정한 정보가 없습니다.");
         console.log("No changes detected, no mutation occurred.");
