@@ -1,24 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowUp, SendHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCreateNewChatMutation } from "../hooks/useCreateNewChatMutation";
+import { useCreateNewChatMutation } from "./useCreateNewChatMutation";
+import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
 import useSkeletonStore from "@/store/skeletonStore";
-import { Textarea } from "@/components/ui/textarea";
 import useSessionErrorStore from "@/store/sessionErrorStore";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useSendChatMutation } from "../hooks/useSendChatMutation";
-import { useSendChatStreamMutation } from "../hooks/useSendChatStreamMutation";
+import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
+import { useSendChatMutation } from "./useSendChatMutation";
 
-type Props = {
-  chatId?: number;
-};
-
-export default function MessageInput({ chatId }: Props) {
+export const useMessageInput2 = (chatId: number) => {
   const [inputValue, setInputValue] = useState("");
   const [chatIndex, setChatIndex] = useState<number>();
 
@@ -26,6 +20,7 @@ export default function MessageInput({ chatId }: Props) {
 
   const { mutate } = useCreateNewChatMutation();
   const { mutate: sendMutate } = useSendChatMutation(chatId, chatIndex);
+  // const { mutate } = useCreateNewChatStreamMutation();
   // const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
 
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
@@ -41,7 +36,8 @@ export default function MessageInput({ chatId }: Props) {
       return;
     }
 
-    if (inputValue.trim() == "") return;
+    if (inputValue.trim() === "") return;
+
     if (!chatId) {
       // 새 채팅
       mutate(inputValue);
@@ -51,7 +47,7 @@ export default function MessageInput({ chatId }: Props) {
         queryClient.setQueryData(
           ["chatHistory", chatId],
           (prev: ChatContent[]) => {
-            setChatIndex(prev.length);
+            // setChatIndex(prev.length + 1);
             const newChat = {
               chatMessageId: prev[prev.length - 1].chatMessageId + 1,
               content: inputValue,
@@ -60,7 +56,6 @@ export default function MessageInput({ chatId }: Props) {
             return [...prev, newChat];
           }
         );
-        setIsChatLoading(true);
         queryClient.setQueryData(
           ["chatHistory", chatId],
           (prev: ChatContent[]) => {
@@ -73,11 +68,14 @@ export default function MessageInput({ chatId }: Props) {
             return [...prev, newChat];
           }
         );
+        setIsChatLoading(true);
+
         sendMutate({ message: inputValue });
       } catch {
         toast.error("잘못된 요청입니다.");
       }
     }
+
     setInputValue(""); // 입력 필드 초기화
   };
 
@@ -94,34 +92,11 @@ export default function MessageInput({ chatId }: Props) {
     }
   }, [inputValue]);
 
-  return (
-    <div className="flex flex-row bg-[#f4f4f4] items-center justify-center flex-1 w-full gap-2 min-w-0 p-2 border rounded-3xl">
-      <textarea
-        ref={textareaRef}
-        rows={1}
-        dir="auto"
-        className="m-0 p-1 pl-4 placeholder:text-[#9B9B9B] resize-none w-full h-full bg-transparent outline-none max-h-52 overflow-y-auto"
-        placeholder="물어보고 싶은 질문을 입력해주세요!"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-        }}
-        onKeyDown={(e: any) => {
-          if (e.isComposing || e.keyCode === 229) return;
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit();
-          }
-        }}
-      />
-      <div className="flex items-end h-full justify-center">
-        <ArrowUp
-          onClick={handleSubmit}
-          className={`text-white rounded-full w-8 h-8 p-1 ${
-            inputValue ? "bg-[#0E1E46]" : "bg-gray-200"
-          }  hover:bg-gray-500 items-center justify-center`}
-        />
-      </div>
-    </div>
-  );
-}
+  return {
+    isChatLoading,
+    handleSubmit,
+    textareaRef,
+    inputValue,
+    setInputValue,
+  };
+};

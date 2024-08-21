@@ -1,6 +1,5 @@
 "use client";
 
-import { useWeatherQuery } from "../hooks/useWeatherOpenAPIQuery";
 import TraffixWidget from "./TraffixWidget";
 import WeatherWidget from "./WeatherWidget";
 

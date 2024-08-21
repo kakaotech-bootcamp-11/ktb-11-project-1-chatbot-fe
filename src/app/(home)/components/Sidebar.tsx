@@ -87,7 +87,7 @@ export default function Sidebar({ session }: Props) {
   return (
     <>
       <AlertDialog>
-        <aside className="flex flex-col h-full py-4 space-y-2 w-[260px] max-w-[260px]">
+        <aside className="flex flex-col md:w-1/4 lg:w-1/5 h-full py-4 space-y-2 w-1/4 max-w-[260px] shadow-inner">
           <header className="flex flex-row items-center space-x-3">
             <Image
               height={40}
@@ -102,7 +102,7 @@ export default function Sidebar({ session }: Props) {
               <div>ray! 환영합니다!</div>
             </div>
           </header>
-          <Separator />
+          <Separator className="bg-gray-500" />
           <button
             onClick={addNewChatMessage}
             className="w-full p-2 mb-2 text-white border border-white rounded hover:bg-white hover:text-[#0E1E46]"
@@ -133,18 +133,20 @@ export default function Sidebar({ session }: Props) {
                       title: chat.title,
                     });
                   }}
-                  className={`absolute right-4 ${
-                    chat.id === currentChatId || chat.id === hoveredChatId
-                      ? "visible"
+                  className={`absolute right-4 p-2 ${
+                    chat.id === currentChatId
+                      ? "visible bg-white"
+                      : chat.id === hoveredChatId
+                      ? "visible bg-gray-700"
                       : "invisible"
                   }`}
                 >
-                  <Trash2 size={16} className="hover:text-red-500" />
+                  <Trash2 size={16} className=" hover:text-red-500" />
                 </AlertDialogTrigger>
               </div>
             ))}
           </div>
-          <Separator />
+          <Separator className="bg-gray-500" />
           <div className="flex flex-col items-center justify-center p-2">
             <div
               onClick={() => {

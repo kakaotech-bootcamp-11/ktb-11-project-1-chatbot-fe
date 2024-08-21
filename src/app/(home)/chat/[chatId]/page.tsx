@@ -1,7 +1,7 @@
 "use client";
 
 import Chat from "./components/Chat";
-import MessageInput from "../../components/MessageInput";
+import MessageInput from "../../components/MessageInput2";
 import Widget from "../../components/Widget";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export default function Page({ params }: Props) {
   const chatId = parseInt(params.chatId);
-  console.log(chatId);
+  // console.log(chatId);
 
   return (
     <div className="flex flex-row w-full h-full p-2 space-x-2">

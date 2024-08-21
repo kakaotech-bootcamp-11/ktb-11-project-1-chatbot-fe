@@ -8,6 +8,8 @@ import { useChatHistoryQuery } from "@/app/(home)/hooks/useChatQuery";
 import Loading from "@/app/components/loading";
 import { useEffect, useRef } from "react";
 import CursorLoading from "./CursorLoading";
+import useSkeletonStore from "@/store/skeletonStore";
+import useInitialDataStore from "@/store/initialDataStore";
 
 type Props = {
   chatId: number;
@@ -16,6 +18,9 @@ type Props = {
 export default function Chat({ chatId }: Props) {
   const { data, error, isLoading } = useChatHistoryQuery(chatId);
   const scrollContainerRef = useRef<any>(null);
+  const { isChatLoading } = useSkeletonStore((state) => state);
+
+  const { initialData } = useInitialDataStore((state) => state);
 
   useEffect(() => {
     // 데이터가 로드될 때마다 스크롤을 가장 아래로 설정
@@ -23,11 +28,12 @@ export default function Chat({ chatId }: Props) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [data]);
+  }, [data, initialData]);
 
-  // const isChatLoading = useSkeletonStore((state) => state.isChatLoading);
+  // chatId가 0일 때, zustand의 initialData를 사용하도록 설정
 
-  if (!data) return <Loading />;
+  const chatData = chatId === 0 ? initialData : data;
+  if (isLoading && chatId !== 0) return <Loading />;
   if (error) return <div>Error</div>;
 
   return (
@@ -36,7 +42,7 @@ export default function Chat({ chatId }: Props) {
       ref={scrollContainerRef}
     >
       <div className="w-full h-full space-y-4">
-        {data.map((message, index) => (
+        {chatData?.map((message, index) => (
           <div
             key={index}
             className={`flex items-start gap-4 ${
@@ -49,22 +55,18 @@ export default function Chat({ chatId }: Props) {
                 <AvatarImage src="/images/ktb_balloon_logo.jpeg" />
               </Avatar>
             )}
-            {message.content === "" ? (
-              <div className="bg-muted max-w-[75%] p-4 rounded-2xl">
-                {/* <Skeleton className="h-4 w-[200px]" /> */}
-                <CursorLoading />
-              </div>
-            ) : (
-              <div
-                className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[75%] ${
-                  message.isUser
-                    ? "bg-primary text-primary-foreground font-normal"
-                    : "bg-muted text-muted-foreground text-[#0E1E46]"
-                }`}
-              >
-                {message.isUser ? (
-                  message.content
-                ) : (
+
+            <div
+              className={`rounded-3xl p-4 whitespace-pre-wrap max-w-[75%] ${
+                message.isUser
+                  ? "bg-primary text-primary-foreground font-normal"
+                  : "bg-muted text-muted-foreground text-[#0E1E46]"
+              }`}
+            >
+              {message.isUser ? (
+                message.content
+              ) : (
+                <span className="">
                   <ReactMarkdown
                     className="prose"
                     components={{
@@ -86,9 +88,12 @@ export default function Chat({ chatId }: Props) {
                   >
                     {message.content}
                   </ReactMarkdown>
-                )}
-              </div>
-            )}
+                  {isChatLoading && index === chatData.length - 1 && (
+                    <CursorLoading />
+                  )}
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>

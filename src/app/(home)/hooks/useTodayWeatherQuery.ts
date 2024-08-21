@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 
 interface TodayWeatherNow {
   temp: number;
-  temp_min: number;
+  tempMin: number;
+  tempMax: number;
   icon: string;
   description: string;
-  temp_max: number;
 }
 
 interface WeatherForecast {
