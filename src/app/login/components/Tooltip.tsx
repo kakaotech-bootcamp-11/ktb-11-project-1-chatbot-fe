@@ -11,7 +11,7 @@ export const Tooltip = ({
     <div className="relative flex flex-col items-center group">
       <span className="flex justify-center">{children}</span>
       <div
-        className={`absolute whitespace-nowrap bottom-full flex flex-col items-center  group-hover:flex`}
+        className={`absolute whitespace-nowrap bottom-full flex flex-col items-center  group-hover:flex animate-floating`}
       >
         <span className="relative z-10 p-2 mb-1 text-xs leading-none whitespace-no-wrap bg-white border border-red-500 rounded-xl">
           {message}

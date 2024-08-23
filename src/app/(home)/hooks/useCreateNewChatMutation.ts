@@ -68,7 +68,7 @@ export function useCreateNewChatMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
-      console.log(data);
+      // console.log(data);
       setInitialData(1, {
         chatMessageId: 1,
         isUser: false,
@@ -78,13 +78,13 @@ export function useCreateNewChatMutation() {
         queryKey: ["titles"],
       });
       router.push(`/chat/${data.chatId}`);
+      setIsChatLoading(false);
       await new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve("데이터 준비 완료");
         }, 1000);
       });
       resetInitialData();
-      setIsChatLoading(false);
     },
     onError: (error, variables, context) => {
       resetInitialData();

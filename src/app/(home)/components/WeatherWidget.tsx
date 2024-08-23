@@ -11,7 +11,7 @@ export default function WeatherWidget() {
   const { data: weeklyWeather } = useWeeklyWeatherQuery();
 
   return (
-    <div className="flex flex-col bg-[#1e2836] rounded-xl h-1/2 w-full p-2 space-y-1">
+    <div className="flex flex-col bg-[#1e2836] rounded-xl h-1/2 w-full p-2 space-y-1 ">
       {todayWeather ? (
         <>
           <div className="flex flex-row items-center justify-between w-full p-1">

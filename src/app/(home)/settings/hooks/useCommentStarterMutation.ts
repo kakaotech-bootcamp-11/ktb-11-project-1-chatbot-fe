@@ -20,8 +20,6 @@ type Props = {
 };
 
 export function useCommentStarterMutation() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationKey: ["commentStarterMutation"],
     mutationFn: async (commentStarters: CommentStarter[]): Promise<any> => {
@@ -47,8 +45,7 @@ export function useCommentStarterMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
-      toast.success("업데이트에 성공했습니다.");
-      queryClient.invalidateQueries({ queryKey: ["commentStarter"] });
+      toast.success("업데이트에 성공했습니다.", { position: "bottom-right" });
     },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");

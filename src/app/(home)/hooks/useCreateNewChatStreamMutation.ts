@@ -2,7 +2,6 @@ import useInitialDataStore from "@/store/initialDataStore";
 import useSkeletonStore from "@/store/skeletonStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ChatContent } from "./useChatQuery";
 import { toast } from "sonner";
 
 export interface CreatedChat {

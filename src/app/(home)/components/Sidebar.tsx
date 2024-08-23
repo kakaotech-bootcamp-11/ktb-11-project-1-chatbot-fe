@@ -18,7 +18,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useDeleteChatMutation } from "../hooks/useDeleteChatMutation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,6 +31,7 @@ type Props = {
 export default function Sidebar({ session }: Props) {
   const router = useRouter();
   const {
+    isLoading,
     isFetching,
     chatTitleList,
     currentChatId,
@@ -55,10 +55,15 @@ export default function Sidebar({ session }: Props) {
   const chatTitles = chatTitleList ?? [];
 
   const deleteChatMessage = (chatId: number) => {
-    deleteChatMutate(chatId);
+    if (currentChatId === deleteInfo.id) {
+      deleteChatMutate(chatId);
+      router.push("/");
+    } else {
+      deleteChatMutate(chatId);
+    }
   };
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <aside className="flex flex-col h-full py-4 space-y-2 w-[318px] max-w-[318px]">
         <header className="flex flex-row items-center space-x-3">
@@ -94,7 +99,7 @@ export default function Sidebar({ session }: Props) {
               width={40}
               src={ktbBalloonLogo}
               className="rounded-xl"
-              style={{ width: "auto", height: "auto" }}
+              style={{ width: "40px", height: "40px" }}
               alt="KTB 로고"
             />
             <div>
@@ -105,13 +110,14 @@ export default function Sidebar({ session }: Props) {
           <Separator className="bg-gray-500" />
           <button
             onClick={addNewChatMessage}
-            className="w-full p-2 mb-2 text-white border border-white rounded hover:bg-white hover:text-[#0E1E46]"
+            className="w-full p-2 mb-2 text-white border border-white rounded hover:bg-white hover:text-[#0E1E46] hover:bg-muted transition-transform transform hover:scale-105"
           >
             새 채팅
           </button>
           <div className="relative h-full px-2 overflow-y-auto custom-scrollbar">
             {chatTitles.map((chat) => (
               <div
+                // href={`/chat/${chat.id}`}
                 key={chat.id}
                 className={`p-2 cursor-pointer flex justify-between items-center rounded-lg ${
                   chat.id === currentChatId
@@ -122,7 +128,7 @@ export default function Sidebar({ session }: Props) {
                 onMouseEnter={() => setHoveredChatId(chat.id)}
                 onMouseLeave={() => setHoveredChatId(null)}
               >
-                <div className="overflow-hidden text-sm text-ellipsis whitespace-nowrap">
+                <div className="overflow-hidden w-full h-full text-sm text-ellipsis whitespace-nowrap">
                   {chat.title}
                 </div>
                 <AlertDialogTrigger

@@ -30,11 +30,10 @@ export default function Chat({ chatId }: Props) {
     }
   }, [data, initialData]);
 
-  // chatId가 0일 때, zustand의 initialData를 사용하도록 설정
-
-  const chatData = chatId === 0 ? initialData : data;
-  if (isLoading && chatId !== 0) return <Loading />;
+  if (isLoading && chatId !== 0 && !initialData) return <Loading />;
   if (error) return <div>Error</div>;
+
+  const chatData = initialData.length !== 0 ? initialData : data;
 
   return (
     <div
@@ -52,7 +51,10 @@ export default function Chat({ chatId }: Props) {
             {!message.isUser && (
               <Avatar className="flex-shrink-0 w-8 h-8 border">
                 <AvatarFallback>JD</AvatarFallback>
-                <AvatarImage src="/images/ktb_balloon_logo.jpeg" />
+                <AvatarImage
+                  src="/images/ktb_balloon_logo.jpeg"
+                  alt="ai_logo"
+                />
               </Avatar>
             )}
 
@@ -66,7 +68,7 @@ export default function Chat({ chatId }: Props) {
               {message.isUser ? (
                 message.content
               ) : (
-                <span className="">
+                <span className="flex items-center">
                   <ReactMarkdown
                     className="prose"
                     components={{
