@@ -1,12 +1,10 @@
 "use client";
 
 import InitialChat from "./components/InitialChat";
-import MessageInput from "./components/MessageInput2";
+import MessageInput from "./components/MessageInput";
 import Widget from "./components/Widget";
 import Chat from "./chat/[chatId]/components/Chat";
 import useInitialDataStore from "@/store/initialDataStore";
-import { useCommentStarterQuery } from "./settings/hooks/useStarterQuery";
-import Loading from "../components/loading";
 
 export default function Page() {
   const { initialData } = useInitialDataStore((state) => state);

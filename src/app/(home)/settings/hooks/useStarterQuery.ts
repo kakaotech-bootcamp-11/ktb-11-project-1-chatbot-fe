@@ -19,10 +19,21 @@ const getCommentStarter = async () => {
   return response.json();
 };
 export const useCommentStarterQuery = () => {
+  const recommendations = [
+    { id: 1, comment: "오늘 날씨에 맞는 음식 추천해줘" },
+    { id: 2, comment: "집 어떻게 가야할지 추천해줘" },
+    { id: 3, comment: "가장 빠른 코딩테스트 날짜가 언제야?" },
+  ];
+
   const chatHistory = useQuery<CommentStarter[]>({
     queryKey: ["commentStarter"],
     queryFn: () => getCommentStarter(),
+    retry: 0,
   });
+
+  if (chatHistory.isError) {
+    return { data: recommendations, error: chatHistory.error };
+  }
 
   return chatHistory;
 };

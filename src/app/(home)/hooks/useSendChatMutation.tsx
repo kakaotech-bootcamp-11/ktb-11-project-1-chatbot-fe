@@ -1,22 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { ChatContent } from "./useChatQuery";
 import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
-
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
+import { AIResponse } from "./useCreateNewChatMutation";
 
 type Props = {
   message: string;
-  // chatIndex: number;
 };
 
 export function useSendChatMutation(
@@ -31,11 +20,11 @@ export function useSendChatMutation(
   return useMutation({
     mutationKey: ["sendChat"],
     mutationFn: async ({ message }: Props): Promise<AIResponse> => {
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve("데이터 준비 완료");
-        }, 3000);
-      });
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve("데이터 준비 완료");
+      //   }, 3000);
+      // });
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/chats/me/${chatId}/messages`,
         {

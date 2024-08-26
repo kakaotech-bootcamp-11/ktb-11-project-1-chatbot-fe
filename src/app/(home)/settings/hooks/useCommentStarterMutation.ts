@@ -1,27 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import useSkeletonStore from "@/store/skeletonStore";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CommentStarter } from "./useStarterQuery";
 
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
-
-type Props = {
-  message: string;
-  // chatIndex: number;
-};
-
 export function useCommentStarterMutation() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationKey: ["commentStarterMutation"],
     mutationFn: async (commentStarters: CommentStarter[]): Promise<any> => {
@@ -47,8 +28,7 @@ export function useCommentStarterMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
-      toast.success("업데이트에 성공했습니다.");
-      queryClient.invalidateQueries({ queryKey: ["commentStarter"] });
+      toast.success("업데이트에 성공했습니다.", { position: "bottom-right" });
     },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");

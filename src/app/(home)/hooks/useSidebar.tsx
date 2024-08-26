@@ -45,6 +45,7 @@ export const useSidebar = () => {
   };
 
   return {
+    isLoading,
     isFetching,
     chatTitleList,
     currentChatId,

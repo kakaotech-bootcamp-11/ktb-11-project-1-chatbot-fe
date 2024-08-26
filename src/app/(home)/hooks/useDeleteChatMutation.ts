@@ -1,18 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { ChatContent } from "./useChatQuery";
-import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
-
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
+import { AIResponse } from "./useCreateNewChatMutation";
 
 export function useDeleteChatMutation() {
   const queryClient = useQueryClient();

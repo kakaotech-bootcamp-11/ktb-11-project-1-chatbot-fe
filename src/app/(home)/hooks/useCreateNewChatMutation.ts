@@ -2,7 +2,6 @@ import useInitialDataStore from "@/store/initialDataStore";
 import useSkeletonStore from "@/store/skeletonStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ChatContent } from "./useChatQuery";
 import { toast } from "sonner";
 
 export interface CreatedChat {
@@ -52,11 +51,11 @@ export function useCreateNewChatMutation() {
           }),
         }
       );
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve("데이터 준비 완료");
-        }, 3000);
-      });
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve("데이터 준비 완료");
+      //   }, 3000);
+      // });
       if (!response.ok) {
         const errorData = await response.json();
         throw {
@@ -68,7 +67,6 @@ export function useCreateNewChatMutation() {
       return response.json();
     },
     onSuccess: async (data, variables, context) => {
-      console.log(data);
       setInitialData(1, {
         chatMessageId: 1,
         isUser: false,
@@ -78,13 +76,13 @@ export function useCreateNewChatMutation() {
         queryKey: ["titles"],
       });
       router.push(`/chat/${data.chatId}`);
+      setIsChatLoading(false);
       await new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve("데이터 준비 완료");
         }, 1000);
       });
       resetInitialData();
-      setIsChatLoading(false);
     },
     onError: (error, variables, context) => {
       resetInitialData();

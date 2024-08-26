@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
 import { useCreateNewChatMutation } from "./useCreateNewChatMutation";
-import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
 import useSkeletonStore from "@/store/skeletonStore";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
 import { useSendChatMutation } from "./useSendChatMutation";
+import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
+import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
 
-export const useMessageInput2 = (chatId: number) => {
+export const useMessageInput = (chatId: number) => {
   const [inputValue, setInputValue] = useState("");
   const [chatIndex, setChatIndex] = useState<number>();
 
@@ -47,7 +46,6 @@ export const useMessageInput2 = (chatId: number) => {
         queryClient.setQueryData(
           ["chatHistory", chatId],
           (prev: ChatContent[]) => {
-            // setChatIndex(prev.length + 1);
             const newChat = {
               chatMessageId: prev[prev.length - 1].chatMessageId + 1,
               content: inputValue,
@@ -81,7 +79,6 @@ export const useMessageInput2 = (chatId: number) => {
 
   useEffect(() => {
     if (textareaRef.current) {
-      // Reset height to auto to calculate the new scrollHeight correctly
       textareaRef.current.style.height = "auto";
       const height = textareaRef.current.scrollHeight;
       if (height <= 242) {

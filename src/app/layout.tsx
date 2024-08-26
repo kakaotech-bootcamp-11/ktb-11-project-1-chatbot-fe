@@ -10,7 +10,6 @@ const ng = Nanum_Gothic({ subsets: ["latin"], weight: ["400"] });
 export const metadata: Metadata = {
   title: "카테부 챗봇",
   description: "카카오 부트캠프 챗봇입니다. 무엇이든 물어보세요.",
-  // icons: "/favicon.ico",
 };
 
 export default function RootLayout({
