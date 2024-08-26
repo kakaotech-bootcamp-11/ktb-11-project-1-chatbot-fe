@@ -103,7 +103,7 @@ export default function Sidebar({ session }: Props) {
             />
             <div>
               <div className="font-bold">카테부 챗봇</div>
-              <div>ray! 환영합니다!</div>
+              <div>환영합니다!</div>
             </div>
           </header>
           <Separator className="bg-gray-500" />
