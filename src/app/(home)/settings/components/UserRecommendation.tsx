@@ -1,7 +1,6 @@
 "use client";
 
 import { z } from "zod";
-import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { RecommendationFormSchema } from "../lib/RecommendationFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,13 +9,11 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Minus, Plus, X } from "lucide-react";
 import { CommentStarter } from "../hooks/useStarterQuery";
 import { useCommentStarterMutation } from "../hooks/useCommentStarterMutation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,7 +33,7 @@ export default function UserRecommendation({ recommendations }: Props) {
       recommendations: recommendations.length > 0 ? recommendations : [],
     },
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control: form.control,
     name: "recommendations",
   });

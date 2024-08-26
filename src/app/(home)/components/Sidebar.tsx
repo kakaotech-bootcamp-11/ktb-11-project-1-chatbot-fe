@@ -44,7 +44,6 @@ export default function Sidebar({ session }: Props) {
   const { sessionError } = useSessionErrorStore((state) => state);
 
   const [hoveredChatId, setHoveredChatId] = useState<number | null>(null);
-  // const [deleteId, setDeleteId] = useState<number>(0);
   const [deleteInfo, setDeleteInfo] = useState({
     id: 0,
     title: "",

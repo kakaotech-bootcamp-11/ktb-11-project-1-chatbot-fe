@@ -2,17 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
 import { ChatContent } from "./useChatQuery";
-
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
+import { AIResponse } from "./useCreateNewChatMutation";
 
 type Props = {
   message: string;
@@ -58,7 +48,6 @@ export function useSendChatStreamMutation(
           const jsonChunks = chunk
             .split("\n\n")
             .filter((c) => c.startsWith("data: "));
-          // console.log(jsonChunks);
 
           for (const jsonChunk of jsonChunks) {
             const jsonStr = jsonChunk.replace("data: ", "");

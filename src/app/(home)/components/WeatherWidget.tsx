@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
-import Loading from "@/app/components/loading";
 import { useTodayWeatherQuery } from "../hooks/useTodayWeatherQuery";
 import { useWeeklyWeatherQuery } from "../hooks/useWeeklyWeatherQuery";
 import { Skeleton } from "@/components/ui/skeleton";

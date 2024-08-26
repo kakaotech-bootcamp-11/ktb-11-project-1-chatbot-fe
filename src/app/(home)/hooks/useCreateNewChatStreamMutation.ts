@@ -3,17 +3,7 @@ import useSkeletonStore from "@/store/skeletonStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
+import { AIResponse, CreatedChat } from "./useCreateNewChatMutation";
 
 export function useCreateNewChatStreamMutation() {
   const router = useRouter();

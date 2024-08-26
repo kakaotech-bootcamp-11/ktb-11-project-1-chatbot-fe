@@ -1,7 +1,7 @@
 "use client";
 
 import Chat from "./components/Chat";
-import MessageInput from "../../components/MessageInput2";
+import MessageInput from "../../components/MessageInput";
 import Widget from "../../components/Widget";
 
 type Props = {

@@ -29,7 +29,6 @@ export const useCommentStarterQuery = () => {
     queryKey: ["commentStarter"],
     queryFn: () => getCommentStarter(),
     retry: 0,
-    // select: (data) => data ?? [], // Optional: Ensure the data is always an array
   });
 
   if (chatHistory.isError) {

@@ -6,10 +6,9 @@ import { useCreateNewChatMutation } from "../hooks/useCreateNewChatMutation";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
 import { useCommentStarterQuery } from "../settings/hooks/useStarterQuery";
-import { useState } from "react";
 
 export default function InitialChat() {
-  const { data: basicMessages } = useCommentStarterQuery(); // isLoading 추가
+  const { data: basicMessages } = useCommentStarterQuery();
 
   const { mutate } = useCreateNewChatMutation();
   const { sessionError } = useSessionErrorStore((state) => state);
@@ -23,7 +22,8 @@ export default function InitialChat() {
   };
 
   const messageBoxStyle =
-    "flex items-center justify-center w-[160px] shadow-lg text-gray-500 text-balance h-full p-4 text-center border rounded-lg cursor-pointer hover:bg-muted transition-transform transform hover:scale-105";
+    "flex items-center justify-center w-[160px] shadow-lg text-gray-500 text-balance h-full p-4 \
+    text-center border rounded-lg cursor-pointer hover:bg-muted transition-transform transform hover:scale-105";
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full space-y-2">

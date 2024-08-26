@@ -1,5 +1,3 @@
-"use client";
-
 import TraffixWidget from "./TraffixWidget";
 import WeatherWidget from "./WeatherWidget";
 

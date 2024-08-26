@@ -9,7 +9,7 @@ export default function UserProfile() {
           <AvatarImage src="/images/ktb_balloon_logo.jpeg" />
         </Avatar>
         <div className="flex flex-col justify-center items-center">
-          <div className="">강창룡</div>
+          <div className="">user</div>
         </div>
       </div>
     </div>

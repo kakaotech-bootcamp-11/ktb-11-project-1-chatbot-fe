@@ -1,23 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import useSkeletonStore from "@/store/skeletonStore";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CommentStarter } from "./useStarterQuery";
-
-export interface CreatedChat {
-  chatId: number;
-  aiResponse: AIResponse;
-}
-export interface AIResponse {
-  chatMessageId: number;
-  content: string;
-  isUser: boolean;
-}
-
-type Props = {
-  message: string;
-  // chatIndex: number;
-};
 
 export function useCommentStarterMutation() {
   return useMutation({
