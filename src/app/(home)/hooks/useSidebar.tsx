@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useChatTitleListQuery } from "@/app/(home)/hooks/useChatQuery";
+import { useUserProfileQuery } from "./useUserProfileQuery";
+import useModalOpenStore from "@/store/modalOpenStore";
 
 export const useSidebar = () => {
   const [currentChatId, setCurrentChatId] = useState<number | null>(null);
+  // const { setIsOpen } = useModalOpenStore((state) => state);
 
   const {
     data: chatTitleList,
@@ -13,6 +16,8 @@ export const useSidebar = () => {
     isLoading,
     isFetching,
   } = useChatTitleListQuery();
+
+  const { data: userProfile } = useUserProfileQuery();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -49,6 +54,7 @@ export const useSidebar = () => {
     isFetching,
     chatTitleList,
     currentChatId,
+    userProfile,
     addNewChatMessage,
     handleChatClick,
     handleKakaoLogin,

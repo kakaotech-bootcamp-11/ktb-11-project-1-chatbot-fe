@@ -80,7 +80,7 @@ export function useCreateNewChatMutation() {
       await new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve("데이터 준비 완료");
-        }, 1000);
+        }, 1500);
       });
       resetInitialData();
     },

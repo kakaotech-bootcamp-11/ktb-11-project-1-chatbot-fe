@@ -1,21 +1,32 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CommentStarter } from "./useStarterQuery";
+import { Dispatch, SetStateAction } from "react";
 
-export function useCommentStarterMutation() {
+interface Address {
+  address: string;
+  zipNo: string;
+  addrDetail: string;
+}
+
+type Props = {
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+};
+
+export function useAddressMutation({ setIsEditing }: Props) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["commentStarterMutation"],
-    mutationFn: async (commentStarters: CommentStarter[]): Promise<any> => {
+    mutationKey: ["addressUpdate"],
+    mutationFn: async (addressInfo: Address): Promise<any> => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/comment_starter`,
+        `${process.env.NEXT_PUBLIC_API_URL}/setting/address`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify(commentStarters),
+          body: JSON.stringify(addressInfo),
         }
       );
       if (!response.ok) {
@@ -30,9 +41,12 @@ export function useCommentStarterMutation() {
     },
     onSuccess: async (data, variables, context) => {
       await queryClient.invalidateQueries({
-        queryKey: ["commentStarter"],
+        queryKey: ["myProfile"],
       });
-      toast.success("업데이트에 성공했습니다.", { position: "bottom-right" });
+      toast.success("주소 업데이트에 성공했습니다.", {
+        position: "bottom-right",
+      });
+      setIsEditing(false);
     },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");

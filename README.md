@@ -1,5 +1,41 @@
 # 🤖 Kakao Tech Bootcamp 챗봇
 
+## 시작하기
+
+```
+git clone https://github.com/kakaotech-bootcamp-11/ktb-11-project-1-chatbot-fe.git
+cd ktb-11-project-1-chatbot-fe
+npm install
+```
+
+
+
+개발 모드로 실행 시 아래 명령어를 입력한다.
+
+```
+npm run dev
+```
+
+http://localhost:3000 에 접속한다.
+
+
+
+프로덕션에 배포 시에는 아래 과정을 따른다.
+
+```
+npm run build
+```
+
+```
+npm run start
+```
+
+
+
+
+
+
+
 
 
 ## 🛠️ 프론트엔드 기술 스택 및 라이브러리
