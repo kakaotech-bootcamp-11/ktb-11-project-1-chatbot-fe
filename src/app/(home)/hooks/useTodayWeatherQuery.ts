@@ -22,13 +22,10 @@ export interface TodayWeatherResponse {
 }
 
 const getWeather = async () => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/weather`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/weather`, {
+    method: "GET",
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

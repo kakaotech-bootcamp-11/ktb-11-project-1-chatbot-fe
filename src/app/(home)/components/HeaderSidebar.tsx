@@ -23,12 +23,13 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
+import useModalOpenStore from "@/store/modalOpenStore";
 
 type Props = {
   session?: string;
 };
 
-export default function Sidebar({ session }: Props) {
+export default function HeaderSidebar() {
   const router = useRouter();
   const {
     isLoading,
@@ -65,7 +66,7 @@ export default function Sidebar({ session }: Props) {
 
   if (isLoading) {
     return (
-      <aside className="hidden md:flex flex-col h-full py-4 space-y-2 w-[318px] max-w-[318px]">
+      <aside className="hidden md:flex flex-col h-full bg-ktb_navy py-4 space-y-2 w-[318px] max-w-[318px]">
         <header className="flex flex-row items-center space-x-3">
           <Skeleton className="w-14 h-14 rounded-xl" />
           <div className="flex flex-col space-y-2">
@@ -91,7 +92,7 @@ export default function Sidebar({ session }: Props) {
 
   return (
     <AlertDialog>
-      <aside className="flex-col hidden w-[260px] md:flex h-full py-4 space-y-2 max-w-[260px] shadow-inner">
+      <aside className="flex flex-col space-y-2 overflow-y-auto">
         <header className="flex flex-row items-center space-x-3">
           {userProfile ? (
             <Image
@@ -113,7 +114,7 @@ export default function Sidebar({ session }: Props) {
         <Separator className="bg-gray-500" />
         <button
           onClick={addNewChatMessage}
-          className="w-full p-2 mb-2 text-white border border-white rounded hover:bg-white hover:text-[#0E1E46] hover:bg-muted transition-transform transform hover:scale-105"
+          className="w-full p-2 border border-white rounded hover:bg-white hover:text-ktb_navy"
         >
           새 채팅
         </button>
@@ -150,7 +151,7 @@ export default function Sidebar({ session }: Props) {
                     : "invisible"
                 }`}
               >
-                <Trash2 size={16} className=" hover:text-red-500" />
+                <Trash2 size={16} className="hover:text-red-500" />
               </AlertDialogTrigger>
             </div>
           ))}

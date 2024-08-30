@@ -13,7 +13,7 @@ interface WeeklyWeatherResponse {
 
 const getWeaklyWeather = async () => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/weather/week`,
+    `${process.env.NEXT_PUBLIC_API_URL}/weather/week`,
     {
       method: "GET",
       credentials: "include",

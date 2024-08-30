@@ -6,8 +6,31 @@ import { useCreateNewChatMutation } from "../hooks/useCreateNewChatMutation";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
 import { useCommentStarterQuery } from "../settings/hooks/useStarterQuery";
+import { MouseEvent, useState } from "react";
 
 export default function InitialChat() {
+  const [style, setStyle] = useState({});
+
+  const handleMouseMove = (e: MouseEvent) => {
+    const { clientX: x, clientY: y } = e;
+    console.log(`Mouse Position - X: ${x}, Y: ${y}`);
+    const { innerWidth: width, innerHeight: height } = window;
+
+    // 화면의 가운데를 기준으로 상대적인 좌표 계산
+    const rotateY = ((x / width) * 2 - 1) * 20; // X축 위치를 기준으로 회전 각도 계산
+    const rotateX = -((y / height) * 2 - 1) * 20; // Y축 위치를 기준으로 회전 각도 계산
+
+    setStyle({
+      transform: `perspective(250px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+    });
+  };
+
+  const handleMouseOut = () => {
+    setStyle({
+      transform: "perspective(250px) rotateY(0deg) rotateX(0deg)",
+    });
+  };
+
   const { data: basicMessages } = useCommentStarterQuery();
 
   const { mutate } = useCreateNewChatMutation();
@@ -26,9 +49,13 @@ export default function InitialChat() {
     text-center border rounded-lg cursor-pointer hover:bg-muted transition-transform transform hover:scale-105";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full space-y-2">
+    <div
+      // onMouseMove={handleMouseMove}
+      // onMouseOut={handleMouseOut}
+      className="flex flex-col items-center justify-center w-full h-full space-y-2"
+    >
       <Image
-        className="drop-shadow-3xl transition-transform transform hover:scale-105"
+        className="transition-transform transform drop-shadow-3xl hover:scale-105"
         style={{
           width: "auto",
           height: "auto",
@@ -39,10 +66,25 @@ export default function InitialChat() {
         alt="ryan"
         priority
       />
+      {/* <div
+        className="relative w-52 h-52 transition-transform duration-0"
+        onMouseMove={handleMouseMove}
+        onMouseOut={handleMouseOut}
+        style={style}
+      >
+        <div className="absolute w-full h-full bg-gradient-to-r from-transparent via-yellow-400/80 to-purple-500/60 bg-[150%_150%] bg-[105deg] opacity-80 mix-blend-color-dodge transition-all"></div>
+        <Image
+          className="object-cover"
+          src={ryan}
+          alt="ryan"
+          layout="fill"
+          priority
+        />
+      </div> */}
       <div className="text-lg">
         카카오테크 부트캠프 챗봇에 오신 것을 환영합니다!
       </div>
-      <div className="flex flex-row items-center justify-center space-x-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
         {!basicMessages ? (
           // 로딩 중일 때 스켈레톤 UI 표시
           <>
