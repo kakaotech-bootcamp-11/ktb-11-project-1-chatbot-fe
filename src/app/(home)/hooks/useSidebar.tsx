@@ -41,7 +41,6 @@ export const useSidebar = () => {
   };
 
   const handleKakaoLogin = () => {
-    console.log("go login");
     router.push("/login");
   };
 

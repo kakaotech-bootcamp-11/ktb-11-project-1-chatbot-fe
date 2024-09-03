@@ -9,21 +9,20 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import HeaderSidebar from "./HeaderSidebar";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   return (
     <Sheet>
       <SheetContent
+        aria-describedby={undefined}
         className="flex flex-col w-[260px] p-1 pt-4 h-full bg-ktb_navy text-white border-none"
         side="left"
       >
+        <SheetTitle></SheetTitle>
         <HeaderSidebar />
       </SheetContent>
       <SheetTrigger>

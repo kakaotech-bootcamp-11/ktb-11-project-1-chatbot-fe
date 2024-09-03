@@ -37,7 +37,7 @@ export default function Chat({ chatId }: Props) {
 
   return (
     <div
-      className="flex flex-col items-center justify-center w-full h-full p-4 overflow-auto"
+      className="flex flex-col items-center justify-center w-full h-full p-4 overflow-y-auto"
       ref={scrollContainerRef}
     >
       <div className="w-full h-full space-y-4">
@@ -90,9 +90,9 @@ export default function Chat({ chatId }: Props) {
                   >
                     {message.content}
                   </ReactMarkdown>
-                  {isChatLoading && index === chatData.length - 1 && (
-                    <CursorLoading />
-                  )}
+                  {message.content === "" &&
+                    isChatLoading &&
+                    index === chatData.length - 1 && <CursorLoading />}
                 </span>
               )}
             </div>

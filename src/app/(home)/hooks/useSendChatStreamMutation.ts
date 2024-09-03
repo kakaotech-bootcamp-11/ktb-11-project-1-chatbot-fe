@@ -2,7 +2,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
 import { ChatContent } from "./useChatQuery";
-import { AIResponse } from "./useCreateNewChatMutation";
+
+export interface CreatedChat {
+  chatId: number;
+  aiResponse: AIResponse;
+}
+export interface AIResponse {
+  chatMessageId: number;
+  content: string;
+  isUser: boolean;
+}
 
 type Props = {
   message: string;
@@ -18,72 +27,70 @@ export function useSendChatStreamMutation(
   return useMutation({
     mutationKey: ["sendChat"],
     mutationFn: async ({ message }: Props): Promise<void> => {
-      const response = await fetch("/api/gpt", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats/me/${chatId}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: message }),
-      });
+        body: JSON.stringify({ content: message }),
+        credentials: "include",
+      }).then((response) => {
+        const reader = response.body!.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch AI response.");
-      }
+        let aiResponse: AIResponse = {
+          chatMessageId: Date.now(), // Temporary ID, could be replaced with a proper ID
+          content: "",
+          isUser: false,
+        };
+        return reader.read().then(function process({ done, value }): any {
+          if (done) {
+            return;
+          }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let aiResponse: AIResponse = {
-        chatMessageId: Date.now(), // Temporary ID, could be replaced with a proper ID
-        content: "",
-        isUser: false,
-      };
+          buffer += decoder.decode(value, { stream: true });
 
-      while (!done) {
-        const { value, done: streamDone } = (await reader?.read()) ?? {};
-        done = streamDone!;
+          // 이벤트 데이터를 처리
+          let lines = buffer.split("\n");
+          for (let i = 0; i < lines.length - 1; i++) {
+            const jsonStr = lines[i].replace("data:", "");
+            if (jsonStr.trim() !== "") {
+              try {
+                const { type, chatId, content } =
+                  JSON.parse(jsonStr).aiResponse;
 
-        const chunk = decoder.decode(value, { stream: true });
-        if (chunk.trim() !== "") {
-          const jsonChunks = chunk
-            .split("\n\n")
-            .filter((c) => c.startsWith("data: "));
-
-          for (const jsonChunk of jsonChunks) {
-            const jsonStr = jsonChunk.replace("data: ", "");
-            if (jsonStr === "[DONE]") {
-              done = true;
-              break;
-            }
-
-            try {
-              const json = JSON.parse(jsonStr);
-              const content = json.choices?.[0]?.delta?.content;
-              if (content) {
+                if (type === "DONE") {
+                  done = true;
+                  break;
+                }
                 aiResponse.content += content;
-                console.log(chatIndex);
-                // Update the query data as the response streams in
                 queryClient.setQueryData(
                   ["chatHistory", chatId],
                   (prev: ChatContent[]) => {
                     const updatedChat = [...(prev || [])];
                     updatedChat[chatIndex as number] = {
                       ...aiResponse,
+                      isUser: false,
                     };
                     return updatedChat;
                   }
                 );
+              } catch (error) {
+                console.error("Failed to parse chunk:", error);
               }
-            } catch (error) {
-              console.error("Failed to parse chunk:", error);
             }
           }
-        }
-      }
-    },
-    onSuccess: () => {
+
+          // 남은 부분을 buffer에 유지
+          buffer = lines[lines.length - 1];
+
+          return reader.read().then(process);
+        });
+      });
       setIsChatLoading(false);
     },
+    onSuccess: () => {},
     onError: () => {
       setIsChatLoading(false);
       toast.error("잘못된 요청입니다.");

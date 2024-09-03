@@ -2,12 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChatContent } from "@/app/(home)/hooks/useChatQuery";
-import { useCreateNewChatMutation } from "./useCreateNewChatMutation";
 import useSkeletonStore from "@/store/skeletonStore";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useSendChatMutation } from "./useSendChatMutation";
 import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
 import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
 
@@ -17,10 +15,8 @@ export const useMessageInput = (chatId: number) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { mutate } = useCreateNewChatMutation();
-  const { mutate: sendMutate } = useSendChatMutation(chatId, chatIndex);
-  // const { mutate } = useCreateNewChatStreamMutation();
-  // const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
+  const { mutate } = useCreateNewChatStreamMutation();
+  const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
 
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
     (state) => state
@@ -46,6 +42,7 @@ export const useMessageInput = (chatId: number) => {
         queryClient.setQueryData(
           ["chatHistory", chatId],
           (prev: ChatContent[]) => {
+            setChatIndex(prev.length - 1);
             const newChat = {
               chatMessageId: prev[prev.length - 1].chatMessageId + 1,
               content: inputValue,

@@ -3,7 +3,13 @@ import useSkeletonStore from "@/store/skeletonStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { AIResponse, CreatedChat } from "./useCreateNewChatMutation";
+import { AIResponse } from "./useSendChatStreamMutation";
+
+interface AiResponse {
+  type: string;
+  responseChatId: number;
+  content: string;
+}
 
 export function useCreateNewChatStreamMutation() {
   const router = useRouter();
@@ -16,101 +22,124 @@ export function useCreateNewChatStreamMutation() {
 
   return useMutation({
     mutationKey: ["createNewStreamChat"],
-    mutationFn: async (content: string): Promise<CreatedChat> => {
+    mutationFn: async (content: string): Promise<any> => {
       setIsChatLoading(true);
 
-      // 유저 메세지
+      // 유저 메세지 추가
       addInitialData({
         chatMessageId: 0,
         content,
         isUser: true,
       });
 
-      // AI 메세지
+      // AI 메세지 준비
       addInitialData({
         chatMessageId: 1,
         content: "",
         isUser: false,
       });
 
-      const response = await fetch("/api/gpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: content }),
-      });
+      let chatId;
+      let title;
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch AI response.");
-      }
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/chats/me/new`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ content }),
+          }
+        );
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let aiResponse: AIResponse = {
-        chatMessageId: Date.now(), // Temporary ID for AI response
-        content: "",
-        isUser: false,
-      };
+        if (!response.ok) {
+          throw new Error("Failed to fetch AI response.");
+        }
 
-      while (!done) {
-        const { value, done: streamDone } = (await reader?.read()) ?? {};
-        done = streamDone!;
+        const reader = response.body!.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+        let done = false;
 
-        const chunk = decoder.decode(value, { stream: true });
-        if (chunk.trim() !== "") {
-          const jsonChunks = chunk
-            .split("\n\n")
-            .filter((c) => c.startsWith("data: "));
+        let aiResponse: AIResponse = {
+          chatMessageId: Date.now(),
+          content: "",
+          isUser: false,
+        };
 
-          for (const jsonChunk of jsonChunks) {
-            const jsonStr = jsonChunk.replace("data: ", "");
-            if (jsonStr === "[DONE]") {
-              done = true;
-              break;
-            }
+        while (!done) {
+          const { value, done: streamDone } = await reader.read();
+          done = streamDone;
 
-            try {
-              const json = JSON.parse(jsonStr);
-              const content = json.choices?.[0]?.delta?.content;
-              if (content) {
+          buffer += decoder.decode(value || new Uint8Array(), {
+            stream: !done,
+          });
+
+          let lines = buffer.split("\n");
+
+          for (let i = 0; i < lines.length - 1; i++) {
+            const jsonStr = lines[i].replace("data:", "").trim();
+            if (jsonStr) {
+              try {
+                const aiJson = JSON.parse(jsonStr);
+                const {
+                  type,
+                  chatId: rchatId,
+                  content,
+                  chatMessageType,
+                  title: rtitle,
+                } = aiJson.aiResponse;
+                if (rchatId && rchatId) {
+                  chatId = rchatId;
+                }
+
+                if (type === "DONE") {
+                  done = true;
+                  break;
+                }
+                if (chatMessageType === "TITLE") {
+                  title = rtitle;
+                }
+                if (!content) {
+                  break;
+                }
                 aiResponse.content += content;
 
-                // Update local state (initial data store) as the response streams in
                 setInitialData(1, {
-                  ...aiResponse,
+                  content: aiResponse.content,
+                  isUser: false,
+                  chatMessageId: Date.now(),
                 });
+              } catch (error) {
+                console.error("Failed to parse chunk:", error);
               }
-            } catch (error) {
-              console.error("Failed to parse chunk:", error);
             }
           }
+
+          buffer = lines[lines.length - 1];
         }
+
+        await queryClient.invalidateQueries({
+          queryKey: ["titles"],
+        });
+        router.push(`/chat/${chatId}`);
+        setIsChatLoading(false);
+
+        // 채팅을 모두 불러온 뒤에 추가 작업 (예: 새로운 페이지로 이동)
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        resetInitialData();
+        return chatId;
+      } catch (error) {
+        console.error("Error during fetching:", error);
+        setIsChatLoading(false);
+        throw error;
       }
-
-      // Simulate creating a new chat and return the chatId
-      // In a real scenario, this would be an API call to create the chat and get the chatId
-      const createdChat: CreatedChat = {
-        chatId: Date.now(), // Simulating a new chatId
-        aiResponse: aiResponse,
-      };
-
-      return createdChat;
     },
-    onSuccess: async (data, variables, context) => {
-      // console.log(data);
-      // Invalidate and refetch any related queries
-      await queryClient.invalidateQueries({
-        queryKey: ["titles"],
-      });
-
-      // router.replace(`/chat/${data.chatId}`);
-
-      // resetInitialData();
-
-      // setIsChatLoading(false);
-    },
+    onSuccess: async (data, variables, context) => {},
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");
       setIsChatLoading(false);
