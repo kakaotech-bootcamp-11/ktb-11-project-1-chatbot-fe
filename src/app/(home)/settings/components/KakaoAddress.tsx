@@ -33,16 +33,10 @@ export default function Addr() {
   };
 
   const onSubmit = () => {
-    console.log({
-      address,
-      zipNo,
-      addrDetail,
-    });
     const addressInfo = { address, zipNo, addrDetail };
     mutate(addressInfo);
     setIsEditing(false);
   };
-  console.log(userProfile?.address.replace(" ", "").length);
   return (
     <div className="flex flex-col space-y-4 text-black w-full shadow-md rounded-md mx-auto">
       <label htmlFor="addr" className="text-white font-semibold">

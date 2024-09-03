@@ -46,7 +46,6 @@ export default function CalendarWidet() {
   };
 
   const handleDateChange = (newDate: Value) => {
-    console.log(newDate);
     setDate(newDate);
   };
   const handleTodayClick = () => {
@@ -55,9 +54,7 @@ export default function CalendarWidet() {
     setDate(today);
   };
   const handleMonthChange = (newActiveStartDate: Date) => {
-    // console.log(moment(newActiveStartDate).format("YYYY-MM"));
     setYearMonth(moment(newActiveStartDate).format("YYYY-MM"));
-    // console.log(newActiveStartDate);
     setActiveStartDate(newActiveStartDate);
   };
 

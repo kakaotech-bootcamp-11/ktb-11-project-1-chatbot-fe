@@ -10,10 +10,11 @@ interface InitialDataState {
 
 const useInitialDataStore = create<InitialDataState>((set) => ({
   initialData: [],
-  setInitialData: (index, value) =>
+  setInitialData: (index, newValue) =>
     set((state) => {
-      const newData = [...state.initialData];
-      newData[index] = value;
+      const newData = state.initialData.map((item, idx) =>
+        idx === index ? { ...item, ...newValue } : item
+      );
       return { initialData: newData };
     }),
   addInitialData: (value) =>

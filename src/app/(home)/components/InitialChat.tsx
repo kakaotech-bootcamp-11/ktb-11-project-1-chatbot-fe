@@ -2,18 +2,17 @@
 
 import Image from "next/image";
 import ryan from "../../../../public/images/ryan.png";
-import { useCreateNewChatMutation } from "../hooks/useCreateNewChatMutation";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
 import { useCommentStarterQuery } from "../settings/hooks/useStarterQuery";
 import { MouseEvent, useState } from "react";
+import { useCreateNewChatStreamMutation } from "../hooks/useCreateNewChatStreamMutation";
 
 export default function InitialChat() {
   const [style, setStyle] = useState({});
 
   const handleMouseMove = (e: MouseEvent) => {
     const { clientX: x, clientY: y } = e;
-    console.log(`Mouse Position - X: ${x}, Y: ${y}`);
     const { innerWidth: width, innerHeight: height } = window;
 
     // 화면의 가운데를 기준으로 상대적인 좌표 계산
@@ -33,7 +32,8 @@ export default function InitialChat() {
 
   const { data: basicMessages } = useCommentStarterQuery();
 
-  const { mutate } = useCreateNewChatMutation();
+  // const { mutate } = useCreateNewChatMutation();
+  const { mutate } = useCreateNewChatStreamMutation();
   const { sessionError } = useSessionErrorStore((state) => state);
 
   const handleMessageSubmmit = (message: string) => {

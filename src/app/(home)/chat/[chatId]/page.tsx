@@ -10,7 +10,6 @@ type Props = {
 
 export default function Page({ params }: Props) {
   const chatId = parseInt(params.chatId);
-  // console.log(chatId);
 
   return (
     <div className="flex flex-row w-full h-full p-2 space-x-2">
