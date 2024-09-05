@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { AIResponse } from "./useCreateNewChatMutation";
+import { AIResponse } from "./useSendChatStreamMutation";
 
 export function useDeleteChatMutation() {
   const queryClient = useQueryClient();
