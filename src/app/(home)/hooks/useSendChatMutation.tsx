@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChatContent } from "./useChatQuery";
 import useSkeletonStore from "@/store/skeletonStore";
 import { toast } from "sonner";
-import { AIResponse } from "./useCreateNewChatMutation";
+import { AIResponse } from "./useSendChatStreamMutation";
 
 type Props = {
   message: string;
