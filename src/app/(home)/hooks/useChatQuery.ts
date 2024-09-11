@@ -75,8 +75,7 @@ export const useChatHistoryQuery = (chatId: number) => {
   const chatHistory = useQuery<ChatContent[]>({
     queryKey: ["chatHistory", chatId],
     queryFn: () => getChatHistory(chatId),
-    enabled: !!chatId && chatId !== 0,
-    retry: 0,
+    retry: 1,
   });
 
   useEffect(() => {

@@ -23,8 +23,6 @@ export function useCreateNewChatStreamMutation() {
   return useMutation({
     mutationKey: ["createNewStreamChat"],
     mutationFn: async (content: string): Promise<any> => {
-      setIsChatLoading(true);
-
       // 유저 메세지 추가
       addInitialData({
         chatMessageId: 0,
@@ -43,6 +41,8 @@ export function useCreateNewChatStreamMutation() {
       let title;
 
       try {
+        setIsChatLoading(true);
+
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/chats/me/new`,
           {
@@ -114,35 +114,34 @@ export function useCreateNewChatStreamMutation() {
                   chatMessageId: Date.now(),
                 });
               } catch (error) {
-                console.error("Failed to parse chunk:", error);
+                console.log("Failed to parse chunk:", error);
               }
             }
           }
 
           buffer = lines[lines.length - 1];
         }
-
-        await queryClient.invalidateQueries({
-          queryKey: ["titles"],
-        });
-        router.push(`/chat/${chatId}`);
-        setIsChatLoading(false);
-
-        // 채팅을 모두 불러온 뒤에 추가 작업 (예: 새로운 페이지로 이동)
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        resetInitialData();
         return chatId;
       } catch (error) {
-        console.error("Error during fetching:", error);
-        setIsChatLoading(false);
+        console.log("Error during fetching:", error);
         throw error;
       }
     },
-    onSuccess: async (data, variables, context) => {},
+    onSuccess: async (data, variables, context) => {
+      setIsChatLoading(false);
+
+      await queryClient.invalidateQueries({
+        queryKey: ["titles"],
+      });
+      router.push(`/chat/${data}`);
+
+      // 채팅을 모두 불러온 뒤에 추가 작업 (예: 새로운 페이지로 이동)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      resetInitialData();
+    },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");
-      setIsChatLoading(false);
     },
   });
 }
