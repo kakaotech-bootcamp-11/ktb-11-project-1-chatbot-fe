@@ -136,7 +136,7 @@ export function useCreateNewChatStreamMutation() {
       router.push(`/chat/${data}`);
 
       // 채팅을 모두 불러온 뒤에 추가 작업 (예: 새로운 페이지로 이동)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       resetInitialData();
     },
