@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ReactQueryProviders from "./components/ReactQueryProvider";
-import { Inter, Nanum_Gothic } from "next/font/google";
+import { Inter, Nanum_Gothic, Noto_Sans_KR } from "next/font/google";
 import { Toaster } from "sonner";
 import StyledComponentsRegistry from "@/lib/registry";
 
-const inter = Inter({ subsets: ["latin"] });
-const ng = Nanum_Gothic({ subsets: ["latin"], weight: ["400"] });
+const notoSansKr = Noto_Sans_KR({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "카테부 챗봇",
@@ -24,7 +25,7 @@ export default function RootLayout({
         src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
         async
       />
-      <body className={inter.className}>
+      <body className={notoSansKr.className}>
         <StyledComponentsRegistry>
           <ReactQueryProviders>{children}</ReactQueryProviders>
         </StyledComponentsRegistry>

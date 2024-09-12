@@ -23,6 +23,7 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import useSessionErrorStore from "@/store/sessionErrorStore";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Props = {
   session?: string;
@@ -94,14 +95,18 @@ export default function Sidebar({ session }: Props) {
       <aside className="flex-col hidden w-[260px] md:flex h-full py-4 space-y-2 max-w-[260px] shadow-inner">
         <header className="flex flex-row items-center space-x-3">
           {userProfile ? (
-            <Image
-              height={40}
-              width={40}
-              src={userProfile.profileImage}
-              className="rounded-xl"
-              style={{ width: "40px", height: "40px" }}
-              alt="User Profile"
-            />
+            // <Image
+            //   height={40}
+            //   width={40}
+            //   src={userProfile.profileImage}
+            //   className="rounded-xl"
+            //   style={{ width: "40px", height: "40px" }}
+            //   alt="User Profile"
+            // />
+            <Avatar className="flex-shrink-0 w-10 h-10">
+              <AvatarFallback>profile</AvatarFallback>
+              <AvatarImage src={userProfile.profileImage} />
+            </Avatar>
           ) : (
             <Skeleton className="w-8 h-8" />
           )}

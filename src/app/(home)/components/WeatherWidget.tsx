@@ -15,7 +15,8 @@ export default function WeatherWidget() {
           <div className="flex flex-row items-center justify-between w-full p-1">
             <div className="font-light">오늘 교육장 날씨는?</div>
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${todayWeather.now.icon}.png`}
+              // src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${todayWeather.now.icon}.png`}
+              src={`/images/weather_icon/${todayWeather.now.icon}.png`}
               alt="날씨 아이콘"
               style={{ width: "auto", height: "auto" }}
               width={36}
@@ -47,7 +48,8 @@ export default function WeatherWidget() {
                   {new Date(item.dateTime).getHours()}시
                 </div>
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${item.weatherIcon}.png`}
+                  // src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${item.weatherIcon}.png`}
+                  src={`/images/weather_icon/${item.weatherIcon}.png`}
                   alt="날씨 아이콘"
                   style={{ width: "auto", height: "100%" }}
                   width={24}
@@ -94,7 +96,8 @@ export default function WeatherWidget() {
                   </div>
                   <div className="flex items-center justify-center">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${item.icon}.png`}
+                      // src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/img/w/${item.icon}.png`}
+                      src={`/images/weather_icon/${item.icon}.png`}
                       alt="날씨 아이콘"
                       style={{ width: "auto", height: "auto" }}
                       width={32}

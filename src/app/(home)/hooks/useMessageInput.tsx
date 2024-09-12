@@ -63,14 +63,11 @@ export const useMessageInput = (chatId: number) => {
             return [...prev, newChat];
           }
         );
-        setIsChatLoading(true);
-
         sendMutate({ message: inputValue });
       } catch {
         toast.error("잘못된 요청입니다.");
       }
     }
-
     setInputValue(""); // 입력 필드 초기화
   };
 

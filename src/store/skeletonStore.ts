@@ -7,7 +7,7 @@ interface SkeletonState {
 
 const useSkeletonStore = create<SkeletonState>((set) => ({
   isChatLoading: false,
-  setIsChatLoading: (value) => set({ isChatLoading: value }),
+  setIsChatLoading: async (value) => set({ isChatLoading: value }),
 }));
 
 export default useSkeletonStore;
