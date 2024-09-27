@@ -3,7 +3,6 @@
 import InitialChat from "./components/InitialChat";
 import MessageInput from "./components/MessageInput";
 import Widget from "./components/Widget";
-import Chat from "./chat/[chatId]/components/Chat";
 import useInitialDataStore from "@/store/initialDataStore";
 import InitialMessageChat from "./components/InitialMessageChat";
 

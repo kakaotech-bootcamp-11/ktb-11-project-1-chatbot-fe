@@ -122,7 +122,7 @@ export default function Sidebar({ session }: Props) {
         >
           새 채팅
         </button>
-        <div className="relative h-full px-2 overflow-y-auto custom-scrollbar">
+        <div className="relative h-full overflow-y-auto custom-scrollbar">
           {chatTitles.map((chat) => (
             <div
               // href={`/chat/${chat.id}`}
@@ -147,7 +147,7 @@ export default function Sidebar({ session }: Props) {
                     title: chat.title,
                   });
                 }}
-                className={`absolute right-4 p-2 ${
+                className={`absolute right-2 p-2 ${
                   chat.id === currentChatId
                     ? "visible bg-white"
                     : chat.id === hoveredChatId

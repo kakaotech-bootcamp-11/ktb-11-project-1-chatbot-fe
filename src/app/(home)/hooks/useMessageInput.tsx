@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useSendChatStreamMutation } from "./useSendChatStreamMutation";
 import { useCreateNewChatStreamMutation } from "./useCreateNewChatStreamMutation";
+import { useCreateNewChatStreamMutationLegacy } from "./useCreateNewChatStreamMutationLegacy";
 
 export const useMessageInput = (chatId: number) => {
   const [inputValue, setInputValue] = useState("");
@@ -16,6 +17,7 @@ export const useMessageInput = (chatId: number) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { mutate } = useCreateNewChatStreamMutation();
+  // const { mutate } = useCreateNewChatStreamMutationLegacy();
   const { mutate: sendMutate } = useSendChatStreamMutation(chatId, chatIndex);
 
   const { isChatLoading, setIsChatLoading } = useSkeletonStore(
@@ -26,10 +28,10 @@ export const useMessageInput = (chatId: number) => {
   const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
-    if (sessionError) {
-      toast.error("로그인이 필요한 서비스입니다.");
-      return;
-    }
+    // if (sessionError) {
+    //   toast.error("로그인이 필요한 서비스입니다.");
+    //   return;
+    // }
 
     if (inputValue.trim() === "") return;
 

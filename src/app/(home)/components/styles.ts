@@ -108,16 +108,25 @@ export const StyledCalendarWrapper = styled.div`
   }
 
   .react-calendar__tile:enabled:hover {
-    background-color: #d1d5db; /* hover 시에 배경색을 gray로 변경 */
     border-radius: 0.3rem;
+    background-color: white; /* hover 시에 배경색을 gray로 변경 */
+    abbr {
+      background-color: #d1d5db;
+      border-radius: 50%;
+      padding: 4px;
+      color: black;
+    }
   }
 
   .react-calendar__tile--active,
   .react-calendar__tile:enabled:focus {
-    background-color: black;
     border-radius: 0.3rem;
+    background-color: white;
     abbr {
-      color: white;
+      background-color: #d1d5db;
+      border-radius: 50%;
+      padding: 4px;
+      color: black;
     }
   }
 `;

@@ -18,6 +18,18 @@ const config = {
       },
     },
     extend: {
+      // typography: {
+      //   DEFAULT: {
+      //     css: {
+      //       "code::before": {
+      //         content: "&nbsp;&nbsp;",
+      //       },
+      //       "code::after": {
+      //         content: "&nbsp;&nbsp;",
+      //       },
+      //     },
+      //   },
+      // },
       dropShadow: {
         "3xl": "1px 1px 20px rgba(0, 0, 0, 0.25)",
         "4xl": [

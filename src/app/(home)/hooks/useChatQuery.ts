@@ -58,6 +58,7 @@ export const useChatTitleListQuery = () => {
 
 const getChatHistory = async (chatId: number) => {
   const response = await fetch(
+    // `/api/chats`,
     `${process.env.NEXT_PUBLIC_API_URL}/chats/me/${chatId}`,
     {
       method: "GET",
