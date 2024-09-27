@@ -19,7 +19,7 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export default function CalendarWidet() {
+export default function CalendarWidget() {
   const today = new Date();
   const [date, setDate] = useState<Value>(today);
   const [activeStartDate, setActiveStartDate] = useState<Date | null>(
@@ -52,6 +52,7 @@ export default function CalendarWidet() {
     const today = new Date();
     setActiveStartDate(today);
     setDate(today);
+    handleMonthChange(today);
   };
   const handleMonthChange = (newActiveStartDate: Date) => {
     setYearMonth(moment(newActiveStartDate).format("YYYY-MM"));
@@ -71,11 +72,11 @@ export default function CalendarWidet() {
   const selectedDateSchedules = getSchedulesForDate(date as Date);
 
   return (
-    <div className="flex flex-row w-full gap-1 p-2 overflow-hidden bg-white h-1/2 rounded-2xl">
+    <div className="flex flex-row w-full gap-1 p-2 bg-white rounded-2xl">
       <div className="flex flex-col w-1/2 p-4 text-black bg-white rounded-lg shadow-2xl">
         <div className="text-sm">{moment(date as Date).format("ddd")}요일</div>
         <div className="text-2xl">{moment(date as Date).format("D")}</div>
-        <div className="mt-4 text-sm text-gray-500">
+        <div className="mt-4 text-xs text-gray-500">
           {selectedDateSchedules.length > 0 ? (
             <div className="flex flex-col w-full h-full gap-1">
               {selectedDateSchedules.map((schedule, index) => {

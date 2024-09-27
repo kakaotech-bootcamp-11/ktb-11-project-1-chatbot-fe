@@ -5,12 +5,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AIResponse } from "./useSendChatStreamMutation";
 
-interface AiResponse {
-  type: string;
-  responseChatId: number;
-  content: string;
-}
-
 export function useCreateNewChatStreamMutation() {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -38,13 +32,14 @@ export function useCreateNewChatStreamMutation() {
       });
 
       let chatId;
-      let title;
+      // let title;
 
       try {
         setIsChatLoading(true);
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/chats/me/new`,
+          // "/api/messages",
           {
             method: "POST",
             headers: {
@@ -60,7 +55,7 @@ export function useCreateNewChatStreamMutation() {
         }
 
         const reader = response.body!.getReader();
-        const decoder = new TextDecoder("utf-8");
+        const decoder = new TextDecoder();
         let buffer = "";
         let done = false;
 
@@ -77,6 +72,7 @@ export function useCreateNewChatStreamMutation() {
           buffer += decoder.decode(value || new Uint8Array(), {
             stream: !done,
           });
+          console.log(buffer);
 
           let lines = buffer.split("\n");
 
@@ -100,9 +96,9 @@ export function useCreateNewChatStreamMutation() {
                   done = true;
                   break;
                 }
-                if (chatMessageType === "TITLE") {
-                  title = rtitle;
-                }
+                // if (chatMessageType === "TITLE") {
+                //   title = rtitle;
+                // }
                 if (!content) {
                   break;
                 }
@@ -134,11 +130,6 @@ export function useCreateNewChatStreamMutation() {
         queryKey: ["titles"],
       });
       router.push(`/chat/${data}`);
-
-      // 채팅을 모두 불러온 뒤에 추가 작업 (예: 새로운 페이지로 이동)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      resetInitialData();
     },
     onError: (error, variables, context) => {
       toast.error("잘못된 요청입니다.");

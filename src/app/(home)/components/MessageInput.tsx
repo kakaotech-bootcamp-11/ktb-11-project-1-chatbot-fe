@@ -2,6 +2,7 @@
 
 import { ArrowUp } from "lucide-react";
 import { useMessageInput } from "../hooks/useMessageInput";
+import { useEffect, useState } from "react";
 
 type Props = {
   chatId?: number;
