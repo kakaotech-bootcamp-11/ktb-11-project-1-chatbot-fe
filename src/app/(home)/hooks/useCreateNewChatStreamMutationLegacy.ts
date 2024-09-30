@@ -1,18 +1,15 @@
 import useInitialDataStore from "@/store/initialDataStore";
 import useSkeletonStore from "@/store/skeletonStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AIResponse, CreatedChat } from "./useSendChatStreamMutation";
 
 export function useCreateNewChatStreamMutationLegacy() {
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const { isChatLoading, setIsChatLoading } = useSkeletonStore(
+  const { setIsChatLoading } = useSkeletonStore((state) => state);
+  const { setInitialData, addInitialData } = useInitialDataStore(
     (state) => state
   );
-  const { setInitialData, resetInitialData, addInitialData } =
-    useInitialDataStore((state) => state);
 
   return useMutation({
     mutationKey: ["createNewStreamChat"],
