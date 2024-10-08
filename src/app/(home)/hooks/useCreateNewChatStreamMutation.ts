@@ -96,9 +96,7 @@ export function useCreateNewChatStreamMutation() {
                   done = true;
                   break;
                 }
-                // if (chatMessageType === "TITLE") {
-                //   title = rtitle;
-                // }
+
                 if (!content) {
                   break;
                 }
