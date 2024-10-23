@@ -70,6 +70,11 @@ export const StyledCalendarWrapper = styled.div`
       background-color: black;
       border-radius: 50%;
       padding: 4px;
+      width: 1.1rem;
+      height: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: white; /* Primary Blue */
     }
   }
@@ -93,6 +98,10 @@ export const StyledCalendarWrapper = styled.div`
   .react-calendar__tile {
     padding: 5px 0px 18px;
     position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   /* 네비게이션 월 스타일 적용 */
@@ -114,6 +123,11 @@ export const StyledCalendarWrapper = styled.div`
       background-color: #d1d5db;
       border-radius: 50%;
       padding: 4px;
+      width: 1.1rem;
+      height: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: black;
     }
   }
@@ -126,6 +140,11 @@ export const StyledCalendarWrapper = styled.div`
       background-color: #d1d5db;
       border-radius: 50%;
       padding: 4px;
+      width: 1.1rem; /* 일정한 너비 */
+      height: 1.1rem; /* 일정한 높이 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: black;
     }
   }
@@ -164,11 +183,71 @@ export const StyledToday = styled.div`
 `;
 
 /* 출석한 날짜에 점 표시 스타일 */
-export const StyledDot = styled.div`
+export const StyledRedDot = styled.div`
   background-color: red; /* Light Blue */
   border-radius: 50%;
   width: 0.3rem;
   height: 0.3rem;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+export const StyledBlueDot = styled.div`
+  background-color: blue; /* Light Blue */
+  border-radius: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+// 새로 추가한 초록 점 스타일
+export const StyledGreenDot = styled.div`
+  background-color: green;
+  border-radius: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+export const StyledDotContainer = styled.div`
+  display: flex;
+  gap: 0.1rem;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+// 점 대신 사각형 스타일
+export const StyledRedSquare = styled.div`
+  background-color: red;
+  border-radius: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+`;
+
+export const StyledBlueSquare = styled.div`
+  background-color: blue;
+  border-radius: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+`;
+
+export const StyledGreenSquare = styled.div`
+  background-color: green;
+  border-radius: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+`;
+
+export const StyledSquareContainer = styled.div`
+  display: flex;
+  gap: 0.05rem;
   position: absolute;
   top: 70%;
   left: 50%;

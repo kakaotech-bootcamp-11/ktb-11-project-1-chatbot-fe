@@ -2,7 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface ScheduleResponse {
   date: string;
-  description: string[];
+  scheduleList: ScheduleInfo[];
+}
+interface ScheduleInfo {
+  name: string;
+  tag: "CODDING_TEST" | "LESSON" | "HOLIDAY";
 }
 
 const getScheduleForMonth = async (day: string) => {
@@ -18,15 +22,11 @@ const getScheduleForMonth = async (day: string) => {
   }
   const data: ScheduleResponse[] = await response.json();
   return data || [];
-  // return response.json();
 };
 export const useScheduleQuery = (day: string) => {
   const schedules = useQuery<ScheduleResponse[]>({
     queryKey: ["schedule", day],
     queryFn: () => getScheduleForMonth(day),
-    // retry: 1,
-    // select: (data) => data ?? [],
-    // placeholderData: keepPreviousData,
   });
   return schedules || [];
 };

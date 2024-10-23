@@ -9,10 +9,17 @@ import {
   StyledCalendar,
   StyledDate,
   StyledToday,
-  StyledDot,
+  StyledBlueDot,
+  StyledRedDot,
+  StyledGreenDot,
+  StyledDotContainer,
+  StyledRedSquare,
+  StyledBlueSquare,
+  StyledGreenSquare,
+  StyledSquareContainer,
 } from "./styles";
 import "moment/locale/ko";
-import { useScheduleQuery } from "../hooks/useScheduleQuery";
+import { ScheduleResponse, useScheduleQuery } from "../hooks/useScheduleQuery";
 import Loading from "@/app/components/loading";
 
 type ValuePiece = Date | null;
@@ -27,22 +34,16 @@ export default function CalendarWidget() {
   );
   const [yearMonth, setYearMonth] = useState(moment(today).format("YYYY-MM"));
 
-  const colors = [
-    "blue",
-    "emerald",
-    "red",
-    "orange",
-    "yellow",
-    "green",
-  ] as const;
-  type Color = (typeof colors)[number];
-  const colorVariants: Record<Color, string> = {
-    emerald: "text-emerald-700 bg-emerald-100 border-emerald-500",
-    orange: "text-orange-700 bg-orange-100 border-orange-500",
-    yellow: "text-yellow-700 bg-yellow-100 border-yellow-500",
-    green: "text-green-700 bg-green-100 border-green-500",
-    blue: "text-blue-700 bg-blue-100 border-blue-500",
-    red: "text-red-700 bg-red-100 border-red-500",
+  const colorVariants: Record<string, string> = {
+    CODDING_TEST: "text-green-700 bg-green-100 border-green-500",
+    HOLIDAY: "text-red-700 bg-red-100 border-red-500",
+    LESSON: "text-blue-700 bg-blue-100 border-blue-500",
+  };
+
+  const tagColors: Record<string, JSX.Element> = {
+    CODDING_TEST: <StyledGreenSquare key="green" />,
+    HOLIDAY: <StyledRedSquare key="red" />,
+    LESSON: <StyledBlueSquare key="blue" />,
   };
 
   const handleDateChange = (newDate: Value) => {
@@ -59,14 +60,29 @@ export default function CalendarWidget() {
     setActiveStartDate(newActiveStartDate);
   };
 
-  const { data: schedules } = useScheduleQuery(yearMonth);
+  // const { data: schedules } = useScheduleQuery(yearMonth);
+  const schedules: ScheduleResponse[] = [
+    {
+      date: "2024-10-23",
+      scheduleList: [
+        {
+          name: "test",
+          tag: "CODDING_TEST",
+        },
+        {
+          name: "네트워크데이",
+          tag: "LESSON",
+        },
+      ],
+    },
+  ];
 
   const getSchedulesForDate = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
     const foundData = schedules?.find(
       (schedule) => schedule.date === formattedDate
     );
-    return foundData ? foundData.description : [];
+    return foundData ? foundData.scheduleList : [];
   };
 
   const selectedDateSchedules = getSchedulesForDate(date as Date);
@@ -80,8 +96,7 @@ export default function CalendarWidget() {
           {selectedDateSchedules.length > 0 ? (
             <div className="flex flex-col w-full h-full gap-1">
               {selectedDateSchedules.map((schedule, index) => {
-                const color = colors[index % colors.length];
-                const colorClass = colorVariants[color];
+                const colorClass = colorVariants[schedule.tag] || "";
 
                 return (
                   <div
@@ -94,7 +109,7 @@ export default function CalendarWidget() {
                       }`}
                     ></div>
                     <div className={`${colorClass} w-full`}>
-                      {schedule} {/* 일정 내용 */}
+                      {schedule.name} {/* 일정 내용 */}
                     </div>
                   </div>
                 );
@@ -128,20 +143,36 @@ export default function CalendarWidget() {
           }
           // 오늘 날짜에 '오늘' 텍스트 삽입하고 출석한 날짜에 점 표시를 위한 설정
           tileContent={({ date, view }) => {
-            let html = [];
+            let dots = [];
             const formattedDate = moment(date).format("YYYY-MM-DD");
-
-            // dataList에서 현재 타일의 날짜와 일치하는 데이터를 찾음
             const foundData = schedules?.find(
               (dataItem) => dataItem.date === formattedDate
             );
 
-            // 해당 날짜의 일정 리스트가 비어 있지 않은 경우 점을 표시
-            if (foundData && foundData.description.length > 0) {
-              html.push(<StyledDot key={formattedDate} />);
+            if (!foundData) return null;
+
+            const isCoddingTest = foundData.scheduleList.some(
+              (schedule) => schedule.tag === "CODDING_TEST"
+            );
+            if (isCoddingTest) {
+              dots.push(tagColors["CODDING_TEST"]);
             }
 
-            return <>{html}</>;
+            const isHoliday = foundData.scheduleList.some(
+              (schedule) => schedule.tag === "HOLIDAY"
+            );
+            if (isHoliday) {
+              dots.push(tagColors["HOLIDAY"]);
+            }
+
+            const isLesson = foundData.scheduleList.some(
+              (schedule) => schedule.tag === "LESSON"
+            );
+            if (isLesson) {
+              dots.push(tagColors["LESSON"]);
+            }
+
+            return <StyledSquareContainer>{dots}</StyledSquareContainer>;
           }}
         />
         <StyledDate onClick={handleTodayClick}>오늘</StyledDate>
