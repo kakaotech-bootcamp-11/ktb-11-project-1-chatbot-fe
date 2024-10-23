@@ -17,6 +17,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "img1.kakaocdn.net",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   async rewrites() {
