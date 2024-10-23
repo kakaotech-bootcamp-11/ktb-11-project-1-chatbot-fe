@@ -16,10 +16,10 @@ export default function Page() {
   return (
     <div className="relative flex flex-row items-center justify-center w-full h-full text-black">
       {/* 프로필 */}
-      <div className="flex flex-col items-center justify-center w-1/2 h-full">
+      {/* <div className="flex flex-col items-center justify-center w-1/2 h-full">
         <UserProfile />
-      </div>
-      <Separator orientation="vertical" className="bg-gray-500" />
+      </div> */}
+      {/* <Separator orientation="vertical" className="bg-gray-500" /> */}
       {/* 유저 추천 문구 설정 */}
       <div className="flex flex-col items-center w-1/2 h-full">
         <UserRecommendation recommendations={recommendations} />

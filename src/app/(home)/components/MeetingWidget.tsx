@@ -6,7 +6,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import MeetingDialog from "./MeetingDialog";
 import MeetingDataTable from "./MeetingDataTable";
 import { RotateCw } from "lucide-react";
 import {
@@ -19,7 +18,7 @@ import { ExternalLink } from "lucide-react";
 type ReservationInfo = {
   startTime: string;
   endTime: string;
-  team_num: number;
+  team_num: string;
 };
 
 type MeetingRoom = {
@@ -28,61 +27,59 @@ type MeetingRoom = {
   reservationInfo: ReservationInfo[];
 };
 
-export default function MeetingWidget() {
-  const meetingRooms: MeetingRoom[] = [
-    {
-      id: 1,
-      name: "RYAN2",
-      reservationInfo: [
-        // { startTime: "09:00", endTime: "10:00", team_num: 1 },
-        // { startTime: "11:00", endTime: "12:00", team_num: 2 },
-      ],
-    },
-    {
-      id: 2,
-      name: "RYAN3",
-      reservationInfo: [
-        { startTime: "10:00", endTime: "11:30", team_num: 3 },
-        { startTime: "13:00", endTime: "14:00", team_num: 4 },
-      ],
-    },
-    {
-      id: 3,
-      name: "SANGBAE1",
-      reservationInfo: [
-        { startTime: "09:30", endTime: "10:30", team_num: 5 },
-        { startTime: "15:00", endTime: "16:00", team_num: 6 },
-      ],
-    },
-    {
-      id: 4,
-      name: "SANGBAE2",
-      reservationInfo: [
-        { startTime: "10:30", endTime: "11:30", team_num: 7 },
-        { startTime: "14:00", endTime: "15:00", team_num: 8 },
-      ],
-    },
-    {
-      id: 5,
-      name: "GOORMEE2",
-      reservationInfo: [
-        { startTime: "12:00", endTime: "13:00", team_num: 9 },
-        { startTime: "16:00", endTime: "17:00", team_num: 10 },
-      ],
-    },
-    {
-      id: 6,
-      name: "GOORMEE3",
-      reservationInfo: [
-        { startTime: "09:15", endTime: "10:15", team_num: 11 },
-        { startTime: "14:30", endTime: "15:30", team_num: 12 },
-      ],
-    },
-  ];
+export const meetingRooms: MeetingRoom[] = [
+  {
+    id: 1,
+    name: "RYAN2",
+    reservationInfo: [
+      { startTime: "10:00", endTime: "11:30", team_num: "16" }, // ryan.kim(김현중)
+      { startTime: "13:00", endTime: "14:30", team_num: "팀(오프라인)" }, // woo.jeong(정우용)
+    ],
+  },
+  {
+    id: 2,
+    name: "RYAN3",
+    reservationInfo: [
+      { startTime: "10:30", endTime: "11:30", team_num: "오프라인" }, // sean.park(박시현)
+    ],
+  },
+  {
+    id: 3,
+    name: "SANGBAE1",
+    reservationInfo: [
+      { startTime: "13:00", endTime: "15:00", team_num: "5" }, // heather.shim(심혜수)
+      { startTime: "18:00", endTime: "18:30", team_num: "오프라인" }, // Lyle.kim(김승주)
+    ],
+  },
+  {
+    id: 4,
+    name: "SANGBAE2",
+    reservationInfo: [
+      { startTime: "10:00", endTime: "11:30", team_num: "오프라인" }, // ally.kim(김민지)
+    ],
+  },
+  {
+    id: 5,
+    name: "GOORMEE2",
+    reservationInfo: [
+      { startTime: "10:30", endTime: "12:00", team_num: "14" }, // toby.kim(김대현)
+      { startTime: "13:30", endTime: "15:00", team_num: "8" }, // dodam.kim(김수현)
+      { startTime: "19:00", endTime: "21:00", team_num: "KDT" }, // nina.lee(이미나)
+    ],
+  },
+  {
+    id: 6,
+    name: "GOORMEE3",
+    reservationInfo: [
+      { startTime: "14:00", endTime: "15:00", team_num: "오프라인" }, // nunu.gu(구연우)
+    ],
+  },
+];
 
+export default function MeetingWidget() {
   return (
     <Dialog>
-      <DialogContent className="min-w-[800px] h-full overflow-y-scroll">
+      <DialogContent className="min-w-[1000px] h-full overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>회의실 현황 (9월 23일 목요일)</DialogTitle>
           {/* <MeetingDialog /> */}
@@ -109,12 +106,13 @@ export default function MeetingWidget() {
               key={room.id}
               className="bg-slate-200 p-2 rounded shadow-xl overflow-y-auto"
             >
-              <h2 className="font-bold text-lg">{room.name}</h2>
+              <h2 className="font-bold text-base">{room.name}</h2>
               {room.reservationInfo.length > 0 ? (
                 <ul>
                   {room.reservationInfo.map((reservation, index) => (
                     <li
                       key={index}
+                      className="text-xs"
                       // className="mb-1 border rounded-full border-red-500"
                     >
                       <span className="font-semibold">
