@@ -1,5 +1,6 @@
 import BookWidget from "./BookWidget";
 import CalendarWidget from "./CalendarWidget";
+import GoogleFormWidget from "./GoogleformWidget";
 import MeetingWidget2 from "./MeetingWidget2";
 import MentoringWidget from "./MetoringWidget";
 import RestaurantWidget from "./RestaurantWidget";
@@ -16,6 +17,7 @@ const initialWidgets = [
   { id: "4", component: <BookWidget /> },
   { id: "5", component: <MeetingWidget2 /> },
   { id: "6", component: <MentoringWidget /> },
+  { id: "7", component: <GoogleFormWidget /> },
 ];
 
 function Skeleton() {

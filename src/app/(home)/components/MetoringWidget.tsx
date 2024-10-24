@@ -13,7 +13,7 @@ export default function MentoringWidget() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        멘토링 신청하러 가기
+        AI 멘토링 신청하러 가기
       </a>
       <div className="">
         📢 멘토링 신청 후{" "}
